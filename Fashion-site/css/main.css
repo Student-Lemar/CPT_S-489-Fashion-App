@@ -1,0 +1,121 @@
+:root{
+  --nav-bg: #0b0b0f;
+  --nav-text: rgba(255,255,255,0.92);
+  --nav-muted: rgba(255,255,255,0.70);
+  --nav-border: rgba(255,255,255,0.10);
+  --accent: #ff4d8d;
+}
+
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+}
+
+.topbar-inner{
+  height: 56px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 18px;
+
+  display: flex;
+  align-items: center;
+}
+
+/* LEFT */
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--nav-text);
+  font-weight: 900;
+}
+
+.brand-mark{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--accent), #7c5cff);
+  color: #fff;
+  font-size: 12px;
+}
+
+/* CENTER */
+.nav-center{
+  margin: 0 auto;              /* THIS centers the nav */
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-center a{
+  color: var(--nav-muted);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.nav-center a:hover{
+  color: var(--nav-text);
+  background: rgba(255,255,255,0.06);
+}
+
+/* RIGHT */
+.nav-right{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.signin-link{
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.signin-link:hover{
+  background: rgba(255,255,255,0.06);
+}
+
+/* Round avatar button like your screenshot */
+.avatar-btn{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+
+  border: 2px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  text-decoration: none;
+}
+
+.avatar-btn:hover{
+  border-color: rgba(255,77,141,0.7);
+}
+
+/* If using an image */
+.avatar-btn img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder (no image yet) */
+.avatar-fallback{
+  font-size: 16px;
+  line-height: 1;
+  color: rgba(255,255,255,0.9);
+}
