@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/register.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav">
+        <a href="home.html" data-page="home.html">Home</a>
+        <a href="wardrobe.html" data-page="wardrobe.html">Wardrobe</a>
+        <a href="board.html" data-page="board.html">Board</a>
+      </nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <!-- Guests don't have profiles. Once logged in, you can show an avatar via app.js later. -->
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-layout">
+    <section class="left-panel" aria-label="Left visual panel"></section>
+
+    <section class="right-panel" aria-label="Register panel">
+      <div class="form-wrap">
+        <h1 class="title">Create Creator Account</h1>
+
+        <p class="small" style="margin: -10px 0 14px; color:#555;">
+          A <b>Creator</b> account lets you upload wardrobe items, generate outfits, and post to boards.
+        </p>
+
+        <form id="registerForm" class="form" novalidate>
+          <label class="field">
+            <span class="sr-only">Display name</span>
+            <input
+              type="text"
+              id="displayName"
+              placeholder="Display name"
+              autocomplete="name"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span class="sr-only">Username</span>
+            <input
+              type="text"
+              id="username"
+              placeholder="Username"
+              autocomplete="username"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span class="sr-only">Password</span>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password (min 6 characters)"
+              autocomplete="new-password"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span class="sr-only">Confirm password</span>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm password"
+              autocomplete="new-password"
+              required
+            />
+          </label>
+
+          <!-- Role is fixed to Creator -->
+          <input type="hidden" id="role" value="creator" />
+
+          <button class="btn" type="submit">Create Account</button>
+
+          <p class="small">
+            Already have an account?
+            <a class="link" href="login.html">Sign in</a>
+          </p>
+
+          <p id="message" class="message" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/register.js"></script>
+</body>
+</html>

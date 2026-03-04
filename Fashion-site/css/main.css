@@ -6,6 +6,15 @@
   --accent: #ff4d8d;
 }
 
+/* ---------- Global base (prevents FrankenUI spacing differences) ---------- */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ---------- Topbar ---------- */
 .topbar{
   position: sticky;
   top: 0;
@@ -47,7 +56,7 @@
 
 /* CENTER */
 .nav-center{
-  margin: 0 auto;              /* THIS centers the nav */
+  margin: 0 auto;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -65,6 +74,13 @@
 .nav-center a:hover{
   color: var(--nav-text);
   background: rgba(255,255,255,0.06);
+}
+
+/* Active page highlight */
+.nav-center a.active{
+  color: var(--nav-text);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
 }
 
 /* RIGHT */
@@ -87,7 +103,7 @@
   background: rgba(255,255,255,0.06);
 }
 
-/* Round avatar button like your screenshot */
+/* Round avatar button */
 .avatar-btn{
   width: 34px;
   height: 34px;
@@ -105,7 +121,6 @@
   border-color: rgba(255,77,141,0.7);
 }
 
-/* If using an image */
 .avatar-btn img{
   width: 100%;
   height: 100%;
@@ -113,9 +128,17 @@
   display: block;
 }
 
-/* Placeholder (no image yet) */
 .avatar-fallback{
   font-size: 16px;
   line-height: 1;
   color: rgba(255,255,255,0.9);
+}
+
+/* ---------- Optional mobile nav support ---------- */
+/* Your JS toggles nav.classList.toggle("open") but your CSS had no mobile behavior yet.
+   This keeps desktop exactly the same, and only affects <= 780px */
+@media (max-width: 780px){
+  .nav-center{
+    gap: 10px;
+  }
 }
