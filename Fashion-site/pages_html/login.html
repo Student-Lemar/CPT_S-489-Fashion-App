@@ -13,7 +13,6 @@
 </head>
 
 <body>
-
   <header class="topbar">
     <div class="topbar-inner">
       <!-- LEFT -->
@@ -22,17 +21,18 @@
         <span>Fashion</span>
       </a>
 
-      <!-- CENTER -->
-      <nav class="nav-center" id="topNav">
-        <a href="home.html" data-page="home.html">Home</a>
-        <a href="wardrobe.html" data-page="wardrobe.html">Wardrobe</a>
-        <a href="board.html" data-page="board.html">Board</a>
-      </nav>
+      <!-- CENTER (app.js will populate based on role) -->
+      <nav class="nav-center" id="topNav"></nav>
 
       <!-- RIGHT -->
       <div class="nav-right">
         <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
         <a class="signin-link" href="register.html" data-page="register.html">Register</a>
+
+        <!-- Keep avatar markup consistent across pages (app.js hides it for guests) -->
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
       </div>
     </div>
   </header>

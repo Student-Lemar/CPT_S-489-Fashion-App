@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creator Profile - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/creator_profile.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <section class="card header-card">
+        <div class="avatar" id="avatar">C</div>
+        <div class="info">
+          <h1 id="name">Creator</h1>
+          <div class="handle" id="handle">@creator</div>
+          <p class="bio" id="bio">Public creator profile.</p>
+
+          <div class="actions">
+            <button class="btn primary" id="followBtn" type="button">Follow</button>
+            <span class="hint" id="hint"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <h2>Public posts</h2>
+          <a class="link" href="feed.html">Back to feed →</a>
+        </div>
+
+        <div class="posts" id="posts"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/creator_profile.js"></script>
+</body>
+</html>

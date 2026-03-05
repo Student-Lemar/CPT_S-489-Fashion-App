@@ -45,18 +45,19 @@ function setSession(user) {
   );
 }
 
-function routeAfterLogin(role) {
-  if (role === "admin") return "admin.html"; // (you can add later)
-  if (role === "creator") return "creator_profile.html";
-  return "home.html";
+// ✅ Everyone goes to dashboard after login (for now)
+function routeAfterLogin() {
+  return "dashboard.html";
 }
 
 function getNextParam() {
   const params = new URLSearchParams(window.location.search);
   const next = params.get("next");
+
   // basic safety: block weird full URLs, only allow simple page names
   if (!next) return null;
   if (next.includes("://") || next.includes("\\") || next.includes("..")) return null;
+
   return next;
 }
 
@@ -96,7 +97,7 @@ form.addEventListener("submit", function (e) {
 
   // If user was forced here from a protected page, return them there
   const next = getNextParam();
-  const target = next || routeAfterLogin(match.role);
+  const target = next || routeAfterLogin();
 
   setTimeout(() => {
     window.location.href = target;

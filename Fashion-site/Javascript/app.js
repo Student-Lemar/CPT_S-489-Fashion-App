@@ -1,7 +1,6 @@
-// ---------- Shared Navbar + Auth Gate ----------
+// ---------- Shared Navbar + Auth Gate (Guest / Creator / Admin) ----------
 (function () {
-  // ===== Helpers =====
-  function getSession() {
+  function getUser() {
     try {
       return JSON.parse(localStorage.getItem("currentUser"));
     } catch {
@@ -9,88 +8,88 @@
     }
   }
 
-  function redirectToLogin(nextPage) {
-    const next = encodeURIComponent(nextPage);
-    window.location.href = `login.html?next=${next}`;
-  }
-
-  function isProtectedPage(pageName) {
-    // Pages that require login (creator/admin)
-    const protectedPages = new Set([
-      "wardrobe.html",
-      "board.html",
-      "profile.html",
-      "creator_dashboard.html",
-      "upload.html",
-      "post.html",
-      "create_post.html",
-      "create_board.html"
-    ]);
-    return protectedPages.has(pageName);
-  }
-
-  // ===== Mobile menu toggle =====
-  const menuBtn = document.getElementById("menuBtn");
-  const nav = document.getElementById("topNav");
-
-  if (menuBtn && nav) {
-    menuBtn.addEventListener("click", () => {
-      nav.classList.toggle("open");
-      menuBtn.setAttribute("aria-expanded", nav.classList.contains("open"));
-    });
-  }
-
-  // ===== Active nav link =====
+  const user = getUser();
   const current = (window.location.pathname.split("/").pop() || "").toLowerCase();
 
-  document.querySelectorAll(".nav-center a[data-page]").forEach((a) => {
-    const page = (a.getAttribute("data-page") || "").toLowerCase();
-    if (page === current) a.classList.add("active");
-  });
+  // Pages that require login (Creator/Admin)
+  const protectedPages = new Set([
+    "dashboard.html",
+    "wardrobe.html",
+    "board.html",
+    "profile.html" // Account Settings
+  ]);
 
-  // ===== Auth gating (guests redirected away from protected pages) =====
-  const user = getSession();
-  if (!user && isProtectedPage(current)) {
-    redirectToLogin(current);
-    return; // stop running rest
+  // Redirect guests off protected pages
+  if (!user && protectedPages.has(current)) {
+    window.location.href = `login.html?next=${encodeURIComponent(current)}`;
+    return;
   }
 
-  // ===== Intercept clicks to protected pages if guest =====
-  document.querySelectorAll('a[href$=".html"]').forEach((a) => {
-    const href = (a.getAttribute("href") || "").trim();
-    if (!href) return;
+  // Update navbar links based on role (if nav exists)
+  const nav = document.getElementById("topNav");
+  const signin = document.querySelector(".signin-link");
+  const avatar = document.querySelector(".avatar-btn");
 
-    const page = href.split("?")[0].split("#")[0].toLowerCase();
-    if (!page.endsWith(".html")) return;
+  function setNav(html) {
+    if (!nav) return;
+    nav.innerHTML = html;
 
-    a.addEventListener("click", (e) => {
-      if (!getSession() && isProtectedPage(page)) {
-        e.preventDefault();
-        redirectToLogin(page);
-      }
+    // active link highlight
+    const cur = current;
+    nav.querySelectorAll("a[data-page]").forEach((a) => {
+      const page = (a.getAttribute("data-page") || "").toLowerCase();
+      if (page === cur) a.classList.add("active");
     });
-  });
+  }
 
-  // ===== Navbar UX: hide profile avatar for guests, show logout for logged in =====
-  const avatarBtn = document.querySelector(".avatar-btn");
-  const signInLink = document.querySelector('.signin-link[href="login.html"]');
-
+  // Guest navbar
   if (!user) {
-    // Guest: no profile
-    if (avatarBtn) avatarBtn.style.display = "none";
-  } else {
-    // Logged in: show avatar if present
-    if (avatarBtn) avatarBtn.style.display = "";
+    setNav(`
+      <a href="home.html" data-page="home.html">Home</a>
+      <a href="feed.html" data-page="feed.html">Feed</a>
+    `);
 
-    // Turn "Sign In" into "Logout" (if your HTML has that link)
-    if (signInLink) {
-      signInLink.textContent = "Logout";
-      signInLink.href = "#";
-      signInLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        localStorage.removeItem("currentUser");
-        window.location.href = "home.html";
-      });
+    if (signin) {
+      signin.style.display = "inline-flex";
+      signin.textContent = "Sign In";
+      signin.href = "login.html";
+    }
+    if (avatar) avatar.style.display = "none";
+    return;
+  }
+
+  // Creator navbar
+  if (user.role === "creator") {
+    setNav(`
+      <a href="home.html" data-page="home.html">Home</a>
+      <a href="feed.html" data-page="feed.html">Feed</a>
+      <a href="dashboard.html" data-page="dashboard.html">Dashboard</a>
+      <a href="wardrobe.html" data-page="wardrobe.html">Wardrobe</a>
+      <a href="board.html" data-page="board.html">Boards</a>
+    `);
+
+    if (signin) signin.style.display = "none";
+    if (avatar) {
+      avatar.style.display = "grid";
+      avatar.href = "profile.html"; // Account Settings page (your profile.html)
+      avatar.title = "Account Settings";
+    }
+    return;
+  }
+
+  // Admin navbar
+  if (user.role === "admin") {
+    setNav(`
+      <a href="home.html" data-page="home.html">Home</a>
+      <a href="dashboard.html" data-page="dashboard.html">Dashboard</a>
+      <a href="admin.html" data-page="admin.html">Admin</a>
+    `);
+
+    if (signin) signin.style.display = "none";
+    if (avatar) {
+      avatar.style.display = "grid";
+      avatar.href = "profile.html";
+      avatar.title = "Account Settings";
     }
   }
 })();

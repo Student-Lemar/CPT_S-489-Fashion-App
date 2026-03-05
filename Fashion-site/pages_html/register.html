@@ -10,38 +10,47 @@
 </head>
 
 <body>
+
   <header class="topbar">
     <div class="topbar-inner">
+
+      <!-- LEFT -->
       <a class="brand" href="home.html">
         <span class="brand-mark">489</span>
         <span>Fashion</span>
       </a>
 
-      <nav class="nav-center" id="topNav">
-        <a href="home.html" data-page="home.html">Home</a>
-        <a href="wardrobe.html" data-page="wardrobe.html">Wardrobe</a>
-        <a href="board.html" data-page="board.html">Board</a>
-      </nav>
+      <!-- CENTER (app.js fills this based on role) -->
+      <nav class="nav-center" id="topNav"></nav>
 
+      <!-- RIGHT -->
       <div class="nav-right">
         <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
-        <!-- Guests don't have profiles. Once logged in, you can show an avatar via app.js later. -->
+        <a class="signin-link" href="register.html" data-page="register.html">Register</a>
+
+        <!-- Hidden for guests automatically -->
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
       </div>
+
     </div>
   </header>
 
   <main class="auth-layout">
+
+    <!-- LEFT IMAGE PANEL -->
     <section class="left-panel" aria-label="Left visual panel"></section>
 
+    <!-- RIGHT FORM PANEL -->
     <section class="right-panel" aria-label="Register panel">
       <div class="form-wrap">
-        <h1 class="title">Create Creator Account</h1>
 
-        <p class="small" style="margin: -10px 0 14px; color:#555;">
-          A <b>Creator</b> account lets you upload wardrobe items, generate outfits, and post to boards.
-        </p>
+        <h1 class="title">Create Account</h1>
+        <p class="subtitle">Create a Creator account to upload and post outfits.</p>
 
         <form id="registerForm" class="form" novalidate>
+
           <label class="field">
             <span class="sr-only">Display name</span>
             <input
@@ -69,7 +78,7 @@
             <input
               type="password"
               id="password"
-              placeholder="Password (min 6 characters)"
+              placeholder="Password"
               autocomplete="new-password"
               required
             />
@@ -86,9 +95,6 @@
             />
           </label>
 
-          <!-- Role is fixed to Creator -->
-          <input type="hidden" id="role" value="creator" />
-
           <button class="btn" type="submit">Create Account</button>
 
           <p class="small">
@@ -97,12 +103,15 @@
           </p>
 
           <p id="message" class="message" aria-live="polite"></p>
+
         </form>
       </div>
     </section>
+
   </main>
 
   <script src="../Javascript/app.js"></script>
   <script src="../Javascript/register.js"></script>
+
 </body>
 </html>

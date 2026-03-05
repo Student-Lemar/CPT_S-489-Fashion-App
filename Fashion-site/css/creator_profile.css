@@ -1,0 +1,110 @@
+.page{
+  min-height: calc(100vh - 56px);
+  background: #12131a;
+  color: rgba(255,255,255,0.92);
+  padding: 22px 16px 60px;
+}
+
+.container{
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.card{
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+.header-card{
+  display:flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.avatar{
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  display:grid;
+  place-items:center;
+  font-weight: 900;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.info h1{ margin: 0; font-size: 24px; }
+.handle{ color: rgba(255,255,255,0.65); margin-top: 2px; font-weight: 800; }
+.bio{ color: rgba(255,255,255,0.75); margin: 8px 0 0; line-height: 1.4; }
+
+.actions{
+  margin-top: 12px;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.92);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.btn.primary{
+  border: 0;
+  background: linear-gradient(135deg, #ff4d8d, #7c5cff);
+}
+
+.hint{
+  color: rgba(255,255,255,0.65);
+  font-size: 12px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.section-head h2{ margin: 0; font-size: 16px; }
+.link{ color: rgba(255,255,255,0.75); text-decoration:none; font-weight: 800; font-size: 13px; }
+.link:hover{ text-decoration: underline; }
+
+.posts{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.post{
+  border-radius: 16px;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.06);
+}
+
+.thumb{
+  height: 110px;
+  background: linear-gradient(135deg, rgba(255,77,141,0.35), rgba(124,92,255,0.25));
+}
+
+.pbody{ padding: 12px; }
+.ptitle{ font-weight: 900; }
+.pcap{ margin-top: 6px; color: rgba(255,255,255,0.75); font-size: 12px; line-height: 1.35; }
+
+@media (max-width: 900px){
+  .posts{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px){
+  .posts{ grid-template-columns: 1fr; }
+  .header-card{ flex-direction: column; align-items: flex-start; }
+}

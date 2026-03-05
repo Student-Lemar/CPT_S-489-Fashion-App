@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile - 489 Fashion</title>
+  <title>Account Settings - 489 Fashion</title>
 
   <link rel="stylesheet" href="../css/main.css" />
   <link rel="stylesheet" href="../css/profile.css" />
@@ -18,17 +18,13 @@
         <span>Fashion</span>
       </a>
 
-      <nav class="nav-center" id="topNav">
-        <a href="home.html" data-page="home.html">Home</a>
-        <a href="wardrobe.html" data-page="wardrobe.html">Wardrobe</a>
-        <a href="board.html" data-page="board.html">Board</a>
-      </nav>
+      <!-- Let app.js populate nav based on role -->
+      <nav class="nav-center" id="topNav"></nav>
 
       <div class="nav-right">
         <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
 
-        <a class="avatar-btn" href="profile.html" title="Profile">
-          <!-- This small avatar can later reflect the chosen profile pic via JS if you want -->
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
           <span class="avatar-fallback">👤</span>
         </a>
       </div>
@@ -38,8 +34,8 @@
   <main class="page">
     <div class="container">
       <div class="page-header">
-        <h1>Profile</h1>
-        <p>Manage your account details and profile picture.</p>
+        <h1>Account Settings</h1>
+        <p>Update your profile details and manage your account.</p>
       </div>
 
       <section class="card profile-card">
@@ -71,7 +67,7 @@
 
             <div class="field">
               <label for="username">Username</label>
-              <input id="username" type="text" placeholder="e.g. Username" />
+              <input id="username" type="text" placeholder="e.g. username" />
             </div>
 
             <div class="field">
