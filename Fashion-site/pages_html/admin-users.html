@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - 489 Fashion Admin</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin-users.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="home.html">
+                <span class="brand-mark">489</span>
+                <span>Fashion</span>
+            </a>
+
+            <nav class="nav-center" id="topNav">
+                <a href="admin-dashboard.html">Dashboard</a>
+                <a href="admin-users.html" class="active">User Management</a>
+                <a href="admin-moderation.html">Moderation Queue</a>
+            </nav>
+
+            <div class="nav-right">
+                <a class="signin-link" href="../index.html">Logout</a>
+                <a class="avatar-btn" href="#" title="Admin Profile">
+                    <span class="avatar-fallback">A</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+
+        <header class="page-header">
+            <div>
+                <h1>User Management</h1>
+                <p>Search, view, and manage user accounts and roles.</p>
+            </div>
+            <a href="admin-dashboard.html" class="btn back-btn">← Back to Dashboard</a>
+        </header>
+
+        <!-- Search & Filters -->
+        <section class="toolbar">
+            <div class="search-wrap">
+                <input type="text" id="userSearch" placeholder="Search by username or display name..." />
+                <button class="btn primary" id="searchBtn">Search</button>
+            </div>
+            <div class="filter-wrap">
+                <select id="roleFilter">
+                    <option value="">All Roles</option>
+                    <option value="creator">Creator</option>
+                    <option value="standard">Standard</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspended</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Results count -->
+        <p class="result-count" id="resultCount">Showing 8 users</p>
+
+        <!-- User Table -->
+        <section class="table-section">
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Display Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Reports</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <tr data-role="creator" data-status="active">
+                        <td>@styleking99</td>
+                        <td>Style King</td>
+                        <td><span class="role-tag creator">Creator</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>2</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('styleking99')">View</button>
+                            <button class="btn-action suspend" onclick="suspendUser('styleking99', this)">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr data-role="creator" data-status="suspended">
+                        <td>@user_trendy</td>
+                        <td>Trendy User</td>
+                        <td><span class="role-tag creator">Creator</span></td>
+                        <td><span class="status-tag suspended">Suspended</span></td>
+                        <td>5</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('user_trendy')">View</button>
+                            <button class="btn-action reactivate" onclick="reactivateUser('user_trendy', this)">Reactivate</button>
+                        </td>
+                    </tr>
+                    <tr data-role="standard" data-status="active">
+                        <td>@jess_fits</td>
+                        <td>Jessica F.</td>
+                        <td><span class="role-tag standard">Standard</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>0</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('jess_fits')">View</button>
+                            <button class="btn-action suspend" onclick="suspendUser('jess_fits', this)">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr data-role="creator" data-status="active">
+                        <td>@nova_drip</td>
+                        <td>Nova Drip</td>
+                        <td><span class="role-tag creator">Creator</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>1</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('nova_drip')">View</button>
+                            <button class="btn-action suspend" onclick="suspendUser('nova_drip', this)">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr data-role="standard" data-status="active">
+                        <td>@closet_queen</td>
+                        <td>Closet Queen</td>
+                        <td><span class="role-tag standard">Standard</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>0</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('closet_queen')">View</button>
+                            <button class="btn-action suspend" onclick="suspendUser('closet_queen', this)">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr data-role="creator" data-status="suspended">
+                        <td>@fit_check_99</td>
+                        <td>Fit Check</td>
+                        <td><span class="role-tag creator">Creator</span></td>
+                        <td><span class="status-tag suspended">Suspended</span></td>
+                        <td>8</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('fit_check_99')">View</button>
+                            <button class="btn-action reactivate" onclick="reactivateUser('fit_check_99', this)">Reactivate</button>
+                        </td>
+                    </tr>
+                    <tr data-role="standard" data-status="active">
+                        <td>@minimal_looks</td>
+                        <td>Min Looks</td>
+                        <td><span class="role-tag standard">Standard</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>0</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('minimal_looks')">View</button>
+                            <button class="btn-action suspend" onclick="suspendUser('minimal_looks', this)">Suspend</button>
+                        </td>
+                    </tr>
+                    <tr data-role="admin" data-status="active">
+                        <td>@admin_01</td>
+                        <td>Admin (You)</td>
+                        <td><span class="role-tag admin">Admin</span></td>
+                        <td><span class="status-tag active">Active</span></td>
+                        <td>—</td>
+                        <td class="action-cell">
+                            <button class="btn-action view" onclick="viewUser('admin_01')">View</button>
+                            <button class="btn-action disabled" disabled title="Cannot suspend another admin">Suspend</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="empty-state" id="emptyState" style="display:none;">No users match your search.</p>
+        </section>
+
+        <!-- User Detail Modal -->
+        <div class="modal-overlay" id="userModal" style="display:none;">
+            <div class="modal">
+                <button class="modal-close" id="modalClose">&times;</button>
+                <h2 id="modalUsername">@username</h2>
+                <div class="modal-grid">
+                    <div class="modal-field"><span class="field-label">Display Name</span><span id="modalDisplayName">—</span></div>
+                    <div class="modal-field"><span class="field-label">Role</span><span id="modalRole">—</span></div>
+                    <div class="modal-field"><span class="field-label">Status</span><span id="modalStatus">—</span></div>
+                    <div class="modal-field"><span class="field-label">Reports</span><span id="modalReports">—</span></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn primary" id="modalActionBtn">Suspend Account</button>
+                    <button class="btn secondary" id="modalCancelBtn">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../Javascript/app.js"></script>
+    <script src="../Javascript/admin-users.js"></script>
+</body>
+</html>

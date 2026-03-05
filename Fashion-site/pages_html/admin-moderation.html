@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderation Queue - 489 Fashion Admin</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin-moderation.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="home.html">
+                <span class="brand-mark">489</span>
+                <span>Fashion</span>
+            </a>
+
+            <nav class="nav-center" id="topNav">
+                <a href="admin-dashboard.html">Dashboard</a>
+                <a href="admin-users.html">User Management</a>
+                <a href="admin-moderation.html" class="active">Moderation Queue</a>
+            </nav>
+
+            <div class="nav-right">
+                <a class="signin-link" href="../index.html">Logout</a>
+                <a class="avatar-btn" href="#" title="Admin Profile">
+                    <span class="avatar-fallback">A</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+
+        <header class="page-header">
+            <div>
+                <h1>Moderation Queue</h1>
+                <p>Review reported content and take action.</p>
+            </div>
+            <a href="admin-dashboard.html" class="btn back-btn">← Back to Dashboard</a>
+        </header>
+
+        <!-- Toolbar -->
+        <section class="toolbar">
+            <div class="filter-wrap">
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="post">Posts</option>
+                    <option value="board">Boards</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="pending">Pending Review</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="">All</option>
+                </select>
+            </div>
+            <p class="result-count" id="queueCount">14 items pending review</p>
+        </section>
+
+        <!-- Queue List -->
+        <section class="queue-list" id="queueList">
+
+            <div class="report-card" data-type="post" data-status="pending" data-id="r001">
+                <div class="report-meta">
+                    <span class="type-tag post">Post</span>
+                    <span class="report-id">#1082</span>
+                    <span class="report-date">Reported: 2026-03-04</span>
+                    <span class="report-count">3 reports</span>
+                </div>
+                <div class="report-body">
+                    <div class="report-preview">
+                        <div class="preview-placeholder">[ Outfit Post Preview ]</div>
+                    </div>
+                    <div class="report-info">
+                        <p class="report-user">Posted by: <strong>@styleking99</strong></p>
+                        <p class="report-reason"><strong>Reason:</strong> Inappropriate content</p>
+                        <p class="report-caption">"Check out this look! #ootd #fashion"</p>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button class="btn-mod remove" onclick="takeAction('r001', 'remove', this)">Remove</button>
+                    <button class="btn-mod hide" onclick="takeAction('r001', 'hide', this)">Hide</button>
+                    <button class="btn-mod warn" onclick="takeAction('r001', 'warn', this)">Warn User</button>
+                    <button class="btn-mod noaction" onclick="takeAction('r001', 'noaction', this)">No Action</button>
+                </div>
+            </div>
+
+            <div class="report-card" data-type="board" data-status="pending" data-id="r002">
+                <div class="report-meta">
+                    <span class="type-tag board">Board</span>
+                    <span class="report-id">#304</span>
+                    <span class="report-date">Reported: 2026-03-03</span>
+                    <span class="report-count">1 report</span>
+                </div>
+                <div class="report-body">
+                    <div class="report-preview">
+                        <div class="preview-placeholder">[ Inspiration Board Preview ]</div>
+                    </div>
+                    <div class="report-info">
+                        <p class="report-user">Posted by: <strong>@nova_drip</strong></p>
+                        <p class="report-reason"><strong>Reason:</strong> Spam</p>
+                        <p class="report-caption">Board: "Summer Fits 2026"</p>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button class="btn-mod remove" onclick="takeAction('r002', 'remove', this)">Remove</button>
+                    <button class="btn-mod hide" onclick="takeAction('r002', 'hide', this)">Hide</button>
+                    <button class="btn-mod warn" onclick="takeAction('r002', 'warn', this)">Warn User</button>
+                    <button class="btn-mod noaction" onclick="takeAction('r002', 'noaction', this)">No Action</button>
+                </div>
+            </div>
+
+            <div class="report-card" data-type="post" data-status="pending" data-id="r003">
+                <div class="report-meta">
+                    <span class="type-tag post">Post</span>
+                    <span class="report-id">#1107</span>
+                    <span class="report-date">Reported: 2026-03-03</span>
+                    <span class="report-count">6 reports</span>
+                </div>
+                <div class="report-body">
+                    <div class="report-preview">
+                        <div class="preview-placeholder">[ Outfit Post Preview ]</div>
+                    </div>
+                    <div class="report-info">
+                        <p class="report-user">Posted by: <strong>@fit_check_99</strong></p>
+                        <p class="report-reason"><strong>Reason:</strong> Hate speech</p>
+                        <p class="report-caption">"drip or drown"</p>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button class="btn-mod remove" onclick="takeAction('r003', 'remove', this)">Remove</button>
+                    <button class="btn-mod hide" onclick="takeAction('r003', 'hide', this)">Hide</button>
+                    <button class="btn-mod warn" onclick="takeAction('r003', 'warn', this)">Warn User</button>
+                    <button class="btn-mod noaction" onclick="takeAction('r003', 'noaction', this)">No Action</button>
+                </div>
+            </div>
+
+            <div class="report-card" data-type="post" data-status="pending" data-id="r004">
+                <div class="report-meta">
+                    <span class="type-tag post">Post</span>
+                    <span class="report-id">#1091</span>
+                    <span class="report-date">Reported: 2026-03-02</span>
+                    <span class="report-count">2 reports</span>
+                </div>
+                <div class="report-body">
+                    <div class="report-preview">
+                        <div class="preview-placeholder">[ Outfit Post Preview ]</div>
+                    </div>
+                    <div class="report-info">
+                        <p class="report-user">Posted by: <strong>@user_trendy</strong></p>
+                        <p class="report-reason"><strong>Reason:</strong> Copyright infringement</p>
+                        <p class="report-caption">"Brand new fits #luxury"</p>
+                    </div>
+                </div>
+                <div class="report-actions">
+                    <button class="btn-mod remove" onclick="takeAction('r004', 'remove', this)">Remove</button>
+                    <button class="btn-mod hide" onclick="takeAction('r004', 'hide', this)">Hide</button>
+                    <button class="btn-mod warn" onclick="takeAction('r004', 'warn', this)">Warn User</button>
+                    <button class="btn-mod noaction" onclick="takeAction('r004', 'noaction', this)">No Action</button>
+                </div>
+            </div>
+
+        </section>
+
+        <p class="empty-state" id="emptyQueue" style="display:none;">No items pending review. Queue is clear.</p>
+
+        <!-- Action Confirmation Toast -->
+        <div class="toast" id="actionToast" style="display:none;"></div>
+
+    </main>
+
+    <script src="../Javascript/app.js"></script>
+    <script src="../Javascript/admin-moderation.js"></script>
+</body>
+</html>
