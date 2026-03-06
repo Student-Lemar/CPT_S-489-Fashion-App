@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outfit Detail - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/outfit-detail.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1>Outfit Detail</h1>
+          <p>Review this look, save it, or post it to a board.</p>
+        </div>
+
+        <a class="back-link" href="dashboard.html">← Back to Dashboard</a>
+      </div>
+
+      <section class="layout">
+        <section class="card preview-card">
+          <div class="preview-grid" id="previewGrid">
+            <div class="slot large">
+              <div class="icon" id="topIcon">👕</div>
+              <div class="slot-label">Top</div>
+            </div>
+            <div class="slot">
+              <div class="icon" id="bottomIcon">👖</div>
+              <div class="slot-label">Bottom</div>
+            </div>
+            <div class="slot">
+              <div class="icon" id="shoesIcon">👟</div>
+              <div class="slot-label">Shoes</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card details-card">
+          <div class="detail-block">
+            <label for="outfitName">Outfit Name</label>
+            <input id="outfitName" type="text" placeholder="e.g. Casual Friday" />
+          </div>
+
+          <div class="detail-block">
+            <label for="occasion">Occasion</label>
+            <select id="occasion">
+              <option value="Everyday">Everyday</option>
+              <option value="School">School</option>
+              <option value="Office">Office</option>
+              <option value="Date Night">Date Night</option>
+              <option value="Streetwear">Streetwear</option>
+            </select>
+          </div>
+
+          <div class="detail-block">
+            <label for="caption">Caption / Notes</label>
+            <textarea id="caption" rows="4" placeholder="Describe this outfit..."></textarea>
+          </div>
+
+          <div class="tags">
+            <span class="tag">neutral</span>
+            <span class="tag">casual</span>
+            <span class="tag">layered</span>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="saveBtn" type="button">Save Outfit</button>
+            <button class="btn btn-secondary" id="postBtn" type="button">Post to Board</button>
+          </div>
+
+          <p id="statusMsg" class="status" aria-live="polite"></p>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/outfit-detail.js"></script>
+</body>
+</html>
