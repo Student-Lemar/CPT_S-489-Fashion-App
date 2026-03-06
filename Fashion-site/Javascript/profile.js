@@ -7,7 +7,8 @@ const form = document.getElementById("profileForm");
 const resetBtn = document.getElementById("resetBtn");
 const statusMsg = document.getElementById("statusMsg");
 
-const defaultAvatarSrc = "../Images/profile-placeholder.png";
+const defaultAvatarSrc =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23333740"/><text x="50%" y="54%" font-size="72" text-anchor="middle" fill="%23ffffff" dominant-baseline="middle">👤</text></svg>';
 
 const fields = {
   displayName: document.getElementById("displayName"),
@@ -16,17 +17,32 @@ const fields = {
   bio: document.getElementById("bio"),
 };
 
-const STORAGE_KEY = "fashion_profile_v1";
+function getSession() {
+  try {
+    return JSON.parse(localStorage.getItem("currentUser"));
+  } catch {
+    return null;
+  }
+}
+
+function getStorageKey() {
+  const user = getSession();
+  return user ? `fashion_profile_v1_${user.username}` : "fashion_profile_v1_guest";
+}
 
 function setStatus(text) {
   statusMsg.textContent = text || "";
 }
 
 function loadProfile() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  const user = getSession();
+  const raw = localStorage.getItem(getStorageKey());
+
   if (!raw) {
-    // set demo default email
+    fields.displayName.value = user?.displayName || "";
+    fields.username.value = user?.username || "";
     fields.email.value = "you@example.com";
+    fields.bio.value = "";
     profileImg.src = defaultAvatarSrc;
     return;
   }
@@ -34,26 +50,27 @@ function loadProfile() {
   try {
     const data = JSON.parse(raw);
 
-    fields.displayName.value = data.displayName || "";
-    fields.username.value = data.username || "";
+    fields.displayName.value = data.displayName || user?.displayName || "";
+    fields.username.value = data.username || user?.username || "";
     fields.email.value = data.email || "you@example.com";
     fields.bio.value = data.bio || "";
 
     profileImg.src = data.avatarDataUrl || defaultAvatarSrc;
 
-    // demo stats if present
     document.getElementById("statItems").textContent = data.stats?.items ?? 0;
     document.getElementById("statOutfits").textContent = data.stats?.outfits ?? 0;
     document.getElementById("statFollowers").textContent = data.stats?.followers ?? 0;
   } catch {
-    // fallback if storage is corrupted
+    fields.displayName.value = user?.displayName || "";
+    fields.username.value = user?.username || "";
     fields.email.value = "you@example.com";
+    fields.bio.value = "";
     profileImg.src = defaultAvatarSrc;
   }
 }
 
 function saveProfile(avatarDataUrl) {
-  const current = localStorage.getItem(STORAGE_KEY);
+  const current = localStorage.getItem(getStorageKey());
   const prev = current ? JSON.parse(current) : {};
 
   const data = {
@@ -66,7 +83,15 @@ function saveProfile(avatarDataUrl) {
     stats: prev.stats || { items: 0, outfits: 0, followers: 0 },
   };
 
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(getStorageKey(), JSON.stringify(data));
+
+  // keep currentUser display name updated too
+  const user = getSession();
+  if (user) {
+    user.displayName = data.displayName || user.displayName;
+    user.username = data.username || user.username;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+  }
 }
 
 changePhotoBtn.addEventListener("click", () => avatarInput.click());
@@ -75,13 +100,11 @@ avatarInput.addEventListener("change", () => {
   const file = avatarInput.files?.[0];
   if (!file) return;
 
-  // Basic file type guard
   if (!file.type.startsWith("image/")) {
     setStatus("Please upload an image file.");
     return;
   }
 
-  // Optional: size limit (2MB)
   if (file.size > 2 * 1024 * 1024) {
     setStatus("Image too large. Please upload a file under 2MB.");
     return;
@@ -111,14 +134,16 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  saveProfile(); // keep current avatar
+  saveProfile();
   setStatus("Changes saved.");
 });
 
 resetBtn.addEventListener("click", () => {
-  localStorage.removeItem(STORAGE_KEY);
-  fields.displayName.value = "";
-  fields.username.value = "";
+  localStorage.removeItem(getStorageKey());
+
+  const user = getSession();
+  fields.displayName.value = user?.displayName || "";
+  fields.username.value = user?.username || "";
   fields.email.value = "you@example.com";
   fields.bio.value = "";
   profileImg.src = defaultAvatarSrc;

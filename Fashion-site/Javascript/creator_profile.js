@@ -1,9 +1,12 @@
-function getUser(){
-  try { return JSON.parse(localStorage.getItem("currentUser")); }
-  catch { return null; }
+function getUser() {
+  try {
+    return JSON.parse(localStorage.getItem("currentUser"));
+  } catch {
+    return null;
+  }
 }
 
-function getQueryUser(){
+function getQueryUser() {
   const params = new URLSearchParams(window.location.search);
   return params.get("u") || "creator";
 }
@@ -30,7 +33,7 @@ const profile = profiles[handle] || profiles.creator;
 document.getElementById("name").textContent = profile.name;
 document.getElementById("handle").textContent = `@${handle}`;
 document.getElementById("bio").textContent = profile.bio;
-document.getElementById("avatar").textContent = profile.name.slice(0,1).toUpperCase();
+document.getElementById("avatar").textContent = profile.name.slice(0, 1).toUpperCase();
 
 const postsEl = document.getElementById("posts");
 const list = demoPosts[handle] || demoPosts.creator;
@@ -47,6 +50,40 @@ postsEl.innerHTML = list.map(p => `
 
 const followBtn = document.getElementById("followBtn");
 const hint = document.getElementById("hint");
+const key = "follows_v1";
+
+function getFollows() {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function setFollows(follows) {
+  localStorage.setItem(key, JSON.stringify(follows));
+}
+
+function updateFollowUI() {
+  const user = getUser();
+  const follows = getFollows();
+  const already = follows.includes(handle);
+
+  if (already) {
+    followBtn.textContent = "Following";
+  } else {
+    followBtn.textContent = "Follow";
+  }
+
+  // Cannot follow yourself
+  if (user && user.username && user.username.toLowerCase() === handle) {
+    followBtn.textContent = "Your Profile";
+    followBtn.disabled = true;
+    hint.textContent = "You cannot follow yourself.";
+  }
+}
+
+updateFollowUI();
 
 followBtn.addEventListener("click", () => {
   const user = getUser();
@@ -57,18 +94,22 @@ followBtn.addEventListener("click", () => {
     return;
   }
 
-  // Basic demo follow toggle
-  const key = "follows_v1";
-  const follows = JSON.parse(localStorage.getItem(key) || "[]");
+  // Prevent following self
+  if (user.username && user.username.toLowerCase() === handle) {
+    hint.textContent = "You cannot follow yourself.";
+    return;
+  }
+
+  const follows = getFollows();
   const already = follows.includes(handle);
 
   if (already) {
-    localStorage.setItem(key, JSON.stringify(follows.filter(x => x !== handle)));
-    followBtn.textContent = "Follow";
-    hint.textContent = "Unfollowed (demo).";
+    setFollows(follows.filter(x => x !== handle));
+    hint.textContent = "Unfollowed.";
   } else {
-    localStorage.setItem(key, JSON.stringify([...follows, handle]));
-    followBtn.textContent = "Following";
-    hint.textContent = "Followed (demo).";
+    setFollows([...follows, handle]);
+    hint.textContent = "Followed.";
   }
+
+  updateFollowUI();
 });

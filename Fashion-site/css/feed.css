@@ -1,7 +1,7 @@
 .page{
   min-height: calc(100vh - 56px);
-  background: #12131a;
-  color: rgba(255,255,255,0.92);
+  background: #f7f8fb;
+  color: #222;
   padding: 22px 16px 60px;
 }
 
@@ -16,7 +16,7 @@
 }
 .header p{
   margin: 6px 0 0;
-  color: rgba(255,255,255,0.65);
+  color: #666;
 }
 
 .toolbar{
@@ -26,11 +26,15 @@
 .toolbar input{
   width: 100%;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.14);
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.92);
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #222;
   padding: 10px 12px;
   outline: none;
+}
+
+.toolbar input:focus{
+  border-color: #ff4d8d;
 }
 
 .grid{
@@ -43,15 +47,16 @@
 .card{
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.06);
+  border: 1px solid #ececec;
+  background: #fff;
   text-decoration: none;
-  color: rgba(255,255,255,0.92);
+  color: #222;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
 }
 
 .thumb{
   height: 130px;
-  background: linear-gradient(135deg, rgba(255,77,141,0.35), rgba(124,92,255,0.25));
+  background: linear-gradient(135deg, rgba(255,77,141,0.18), rgba(124,92,255,0.16));
 }
 
 .body{
@@ -63,12 +68,12 @@
   margin: 0 0 4px;
 }
 .meta{
-  color: rgba(255,255,255,0.65);
+  color: #666;
   font-size: 12px;
 }
 .caption{
   margin-top: 8px;
-  color: rgba(255,255,255,0.75);
+  color: #666;
   font-size: 12px;
   line-height: 1.35;
 }

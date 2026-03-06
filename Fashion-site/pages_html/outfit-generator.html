@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Outfit Generator - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/outfit-generator.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1>Outfit Generator</h1>
+          <p>Create outfit suggestions from your wardrobe using simple filters.</p>
+        </div>
+
+        <a class="back-link" href="dashboard.html">← Back to Dashboard</a>
+      </div>
+
+      <section class="layout">
+        <section class="card controls-card">
+          <div class="field">
+            <label for="occasionFilter">Occasion</label>
+            <select id="occasionFilter">
+              <option value="everyday">Everyday</option>
+              <option value="school">School</option>
+              <option value="office">Office</option>
+              <option value="date-night">Date Night</option>
+              <option value="streetwear">Streetwear</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="colorPreference">Color Preference</label>
+            <select id="colorPreference">
+              <option value="any">Any Color</option>
+              <option value="black">Black</option>
+              <option value="white">White</option>
+              <option value="blue">Blue</option>
+              <option value="gray">Gray</option>
+              <option value="green">Green</option>
+              <option value="brown">Brown</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="stylePreference">Style Preference</label>
+            <select id="stylePreference">
+              <option value="balanced">Balanced</option>
+              <option value="minimal">Minimal</option>
+              <option value="casual">Casual</option>
+              <option value="layered">Layered</option>
+            </select>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="generateBtn" type="button">Generate Outfit</button>
+            <button class="btn btn-secondary" id="surpriseBtn" type="button">Surprise Me</button>
+          </div>
+
+          <p class="status" id="statusMsg" aria-live="polite"></p>
+        </section>
+
+        <section class="card results-card">
+          <div class="result-preview" id="resultPreview">
+            <div class="slot">
+              <div class="icon" id="topSlot">👕</div>
+              <div class="slot-label" id="topLabel">Top</div>
+            </div>
+
+            <div class="slot">
+              <div class="icon" id="bottomSlot">👖</div>
+              <div class="slot-label" id="bottomLabel">Bottom</div>
+            </div>
+
+            <div class="slot">
+              <div class="icon" id="shoesSlot">👟</div>
+              <div class="slot-label" id="shoesLabel">Shoes</div>
+            </div>
+          </div>
+
+          <div class="result-summary">
+            <h2 id="outfitTitle">Your outfit suggestion</h2>
+            <p id="outfitReason">Choose filters and generate a look from your wardrobe.</p>
+
+            <div class="result-actions">
+              <a class="btn-link" id="saveOutfitLink" href="outfit-detail.html">Open Outfit Detail</a>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/outfit-generator.js"></script>
+</body>
+</html>
