@@ -22,7 +22,7 @@
           <a href="board.html" class="active">Boards</a>
         </nav>
         <div class="nav-right">
-          <a class="signin-link" href="../index.html">Logout</a>
+          <a class="signin-link" href="#">Logout</a>
           <a class="avatar-btn" href="profile.html"
             ><span class="avatar-fallback">JN</span></a
           >
@@ -71,10 +71,10 @@
               </label>
 
               <label
-                class="radio-card disabled"
-                title="Upgrade to Creator to unlock"
+                class="radio-card"
+                title="Visible to followers and the feed"
               >
-                <input type="radio" name="visibility" value="public" disabled />
+                <input type="radio" name="visibility" value="public" />
                 <div class="radio-content">
                   <span class="radio-title"
                     >🌍 Public <span class="badge">Creator</span></span
@@ -86,8 +86,8 @@
               </label>
             </div>
             <p class="helper-text">
-              Standard users are limited to Private boards.
-              <a href="settings.html">Upgrade to Creator</a>
+              Creators can choose private or public boards.
+              <a href="profile.html">Upgrade to Creator</a>
             </p>
           </div>
 
@@ -99,6 +99,8 @@
       </div>
     </main>
 
+    <script src="../Javascript/store.js"></script>
+    <script src="../Javascript/app.js"></script>
     <script src="../Javascript/create-board.js"></script>
   </body>
 </html>

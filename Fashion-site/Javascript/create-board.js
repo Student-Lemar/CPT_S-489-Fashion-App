@@ -1,39 +1,27 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('create-board-form');
-    const radioCards = document.querySelectorAll('.radio-card');
-    
-    // 1. Handle Visual Selection State
-    radioCards.forEach(card => {
-        const radioInput = card.querySelector('input[type="radio"]');
-        
-        // Skip disabled cards (The Public Option)
-        if (radioInput.disabled) return;
 
-        card.addEventListener('click', () => {
-            // Reset all active classes
-            radioCards.forEach(c => c.classList.remove('selected'));
-            
-            // Add selected class to clicked card
-            card.classList.add('selected');
-            
-            // Ensure radio is checked
-            radioInput.checked = true;
-        });
-    });
-
-    // 2. Handle Form Submission
-    form.addEventListener('submit', (e) => {
-        e.preventDefault(); // Stop page reload
-
-        const name = document.getElementById('board-name').value;
-        const visibility = document.querySelector('input[name="visibility"]:checked').value;
-
-        if (name) {
-            // Simulate success
-            alert(`Success! Created new ${visibility} board: "${name}"`);
-            
-            // Redirect simulation (Go back to Dashboard or Boards list)
-            window.location.href = 'dashboard.html';
-        }
-    });
-});
+(function () {
+  const App = window.FashionApp;
+  const user = App?.getSession();
+  if (!App || !user) return;
+  const form = document.getElementById('create-board-form');
+  const radioCards = document.querySelectorAll('.radio-card');
+  const outfitId = new URLSearchParams(window.location.search).get('outfitId');
+  radioCards.forEach(card => {
+    const input = card.querySelector('input[type="radio"]');
+    if (!input || input.disabled) return;
+    card.onclick = () => { radioCards.forEach(c => c.classList.remove('selected')); card.classList.add('selected'); input.checked = true; };
+  });
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const name = document.getElementById('board-name').value.trim();
+    const description = document.getElementById('board-desc').value.trim();
+    const visibility = document.querySelector('input[name="visibility"]:checked').value;
+    if (!name) return;
+    const board = { id: App.uid('board'), owner: user.username, name, description, visibility, outfitIds: outfitId ? [outfitId] : [], createdAt: new Date().toISOString() };
+    App.upsertBoard(board);
+    if (outfitId) {
+      const outfit = App.getOutfit(outfitId); if (outfit) { outfit.boardIds = [...new Set([...(outfit.boardIds||[]), board.id])]; if (visibility === 'public') outfit.posted = true; App.upsertOutfit(outfit); }
+    }
+    window.location.href = `board-detail.html?id=${encodeURIComponent(board.id)}`;
+  };
+})();

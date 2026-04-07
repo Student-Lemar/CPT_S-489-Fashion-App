@@ -32,8 +32,8 @@
     <div class="container">
       <div class="page-header">
         <div>
-          <h1>Outfit Generator</h1>
-          <p>Create outfit suggestions from your wardrobe using simple filters.</p>
+          <h1>AI Outfit Generator</h1>
+          <p>Analyze your wardrobe colors, apply color theory, and generate ranked outfits from your saved items.</p>
         </div>
 
         <a class="back-link" href="dashboard.html">← Back to Dashboard</a>
@@ -41,42 +41,72 @@
 
       <section class="layout">
         <section class="card controls-card">
-          <div class="field">
-            <label for="occasionFilter">Occasion</label>
-            <select id="occasionFilter">
-              <option value="everyday">Everyday</option>
-              <option value="school">School</option>
-              <option value="office">Office</option>
-              <option value="date-night">Date Night</option>
-              <option value="streetwear">Streetwear</option>
-            </select>
+          <div class="ai-banner">
+            <div>
+              <span class="eyebrow">Local AI stylist</span>
+              <h2>Color theory + wardrobe logic</h2>
+            </div>
+            <span class="confidence-pill" id="aiConfidence">Ready</span>
           </div>
 
-          <div class="field">
-            <label for="colorPreference">Color Preference</label>
-            <select id="colorPreference">
-              <option value="any">Any Color</option>
-              <option value="black">Black</option>
-              <option value="white">White</option>
-              <option value="blue">Blue</option>
-              <option value="gray">Gray</option>
-              <option value="green">Green</option>
-              <option value="brown">Brown</option>
-            </select>
+          <div class="field-grid">
+            <div class="field">
+              <label for="occasionFilter">Occasion</label>
+              <select id="occasionFilter">
+                <option value="everyday">Everyday</option>
+                <option value="school">School</option>
+                <option value="office">Office</option>
+                <option value="date-night">Date Night</option>
+                <option value="streetwear">Streetwear</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="stylePreference">Style Preference</label>
+              <select id="stylePreference">
+                <option value="balanced">Balanced</option>
+                <option value="minimal">Minimal</option>
+                <option value="casual">Casual</option>
+                <option value="layered">Layered</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="colorPreference">Anchor Color</label>
+              <select id="colorPreference">
+                <option value="any">Any Color</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="blue">Blue</option>
+                <option value="gray">Gray</option>
+                <option value="green">Green</option>
+                <option value="brown">Brown</option>
+                <option value="pink">Pink</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="harmonyPreference">Color Theory Mode</label>
+              <select id="harmonyPreference">
+                <option value="auto">Auto Detect</option>
+                <option value="neutral-balance">Neutral Balance</option>
+                <option value="monochrome">Monochrome</option>
+                <option value="analogous">Analogous</option>
+                <option value="complementary">Complementary</option>
+              </select>
+            </div>
           </div>
 
-          <div class="field">
-            <label for="stylePreference">Style Preference</label>
-            <select id="stylePreference">
-              <option value="balanced">Balanced</option>
-              <option value="minimal">Minimal</option>
-              <option value="casual">Casual</option>
-              <option value="layered">Layered</option>
-            </select>
-          </div>
+          <label class="toggle-row" for="useImageScan">
+            <input id="useImageScan" type="checkbox" checked />
+            <span>
+              <strong>Use image color scan</strong>
+              <small>When an item image is available, the generator estimates its dominant color before styling.</small>
+            </span>
+          </label>
 
           <div class="actions">
-            <button class="btn btn-primary" id="generateBtn" type="button">Generate Outfit</button>
+            <button class="btn btn-primary" id="generateBtn" type="button">Generate AI Outfits</button>
             <button class="btn btn-secondary" id="surpriseBtn" type="button">Surprise Me</button>
           </div>
 
@@ -101,9 +131,16 @@
             </div>
           </div>
 
+          <div class="palette-bar" id="paletteBar"></div>
+
           <div class="result-summary">
-            <h2 id="outfitTitle">Your outfit suggestion</h2>
-            <p id="outfitReason">Choose filters and generate a look from your wardrobe.</p>
+            <h2 id="outfitTitle">Your AI outfit suggestion</h2>
+            <p id="outfitReason">Choose filters and let the generator build ranked looks from your wardrobe.</p>
+
+            <ul class="insight-list" id="insightList">
+              <li>The generator scores color harmony, tags, and occasion fit.</li>
+              <li>Turn on image color scan to use uploaded clothing photos when available.</li>
+            </ul>
 
             <div class="result-actions">
               <a class="btn-link" id="saveOutfitLink" href="outfit-detail.html">Open Outfit Detail</a>
@@ -111,9 +148,22 @@
           </div>
         </section>
       </section>
+
+      <section class="card suggestions-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Ranked AI suggestions</h2>
+            <p>Pick the look you want to save or post.</p>
+          </div>
+        </div>
+        <div class="suggestions-list" id="suggestionsList">
+          <p class="empty-suggestions">No suggestions yet. Generate a look to see your top matches.</p>
+        </div>
+      </section>
     </div>
   </main>
 
+  <script src="../Javascript/store.js"></script>
   <script src="../Javascript/app.js"></script>
   <script src="../Javascript/outfit-generator.js"></script>
 </body>

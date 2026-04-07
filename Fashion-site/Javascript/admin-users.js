@@ -1,135 +1,58 @@
-// Admin User Management — S-17
 
-// Sample user data mirroring the table rows
-const users = [
-    { username: 'styleking99',  displayName: 'Style King',   role: 'creator',  status: 'active',    reports: 2 },
-    { username: 'user_trendy',  displayName: 'Trendy User',  role: 'creator',  status: 'suspended', reports: 5 },
-    { username: 'jess_fits',    displayName: 'Jessica F.',   role: 'standard', status: 'active',    reports: 0 },
-    { username: 'nova_drip',    displayName: 'Nova Drip',    role: 'creator',  status: 'active',    reports: 1 },
-    { username: 'closet_queen', displayName: 'Closet Queen', role: 'standard', status: 'active',    reports: 0 },
-    { username: 'fit_check_99', displayName: 'Fit Check',    role: 'creator',  status: 'suspended', reports: 8 },
-    { username: 'minimal_looks',displayName: 'Min Looks',    role: 'standard', status: 'active',    reports: 0 },
-    { username: 'admin_01',     displayName: 'Admin (You)',  role: 'admin',    status: 'active',    reports: null },
-];
+(function () {
+  const App = window.FashionApp;
+  if (!App) return;
+  const searchInput = document.getElementById('userSearch');
+  const searchBtn = document.getElementById('searchBtn');
+  const roleFilter = document.getElementById('roleFilter');
+  const statusFilter = document.getElementById('statusFilter');
+  const resultCount = document.getElementById('resultCount');
+  const emptyState = document.getElementById('emptyState');
+  const tbody = document.getElementById('userTableBody');
+  const modal = document.getElementById('userModal');
+  const modalClose = document.getElementById('modalClose');
+  const modalCancel = document.getElementById('modalCancelBtn');
+  const modalAction = document.getElementById('modalActionBtn');
+  let modalUser = null;
 
-// --- Search & Filter ---
-const searchInput  = document.getElementById('userSearch');
-const searchBtn    = document.getElementById('searchBtn');
-const roleFilter   = document.getElementById('roleFilter');
-const statusFilter = document.getElementById('statusFilter');
-const resultCount  = document.getElementById('resultCount');
-const emptyState   = document.getElementById('emptyState');
-const rows         = document.querySelectorAll('#userTableBody tr');
-
-function applyFilters() {
-    const query  = searchInput.value.toLowerCase().trim();
-    const role   = roleFilter.value;
-    const status = statusFilter.value;
-
-    let visible = 0;
-    rows.forEach(row => {
-        const rowRole   = row.dataset.role;
-        const rowStatus = row.dataset.status;
-        const text      = row.textContent.toLowerCase();
-
-        const matchesQuery  = !query  || text.includes(query);
-        const matchesRole   = !role   || rowRole === role;
-        const matchesStatus = !status || rowStatus === status;
-
-        if (matchesQuery && matchesRole && matchesStatus) {
-            row.style.display = '';
-            visible++;
-        } else {
-            row.style.display = 'none';
-        }
+  function roleClass(role) { return role === 'admin' ? 'admin' : role === 'creator' ? 'creator' : 'standard'; }
+  function visibleUsers() {
+    const q = searchInput.value.trim().toLowerCase();
+    return App.getUsers().filter(user => {
+      const roleOk = !roleFilter.value || user.role === roleFilter.value;
+      const statusOk = !statusFilter.value || user.status === statusFilter.value;
+      const qOk = !q || user.username.toLowerCase().includes(q) || (user.displayName || '').toLowerCase().includes(q);
+      return roleOk && statusOk && qOk;
     });
-
-    resultCount.textContent = `Showing ${visible} user${visible !== 1 ? 's' : ''}`;
-    emptyState.style.display = visible === 0 ? 'block' : 'none';
-}
-
-searchBtn.addEventListener('click', applyFilters);
-searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); });
-roleFilter.addEventListener('change', applyFilters);
-statusFilter.addEventListener('change', applyFilters);
-
-// --- Suspend / Reactivate (inline) ---
-function suspendUser(username, btn) {
-    if (!confirm(`Suspend @${username}? This will log the action.`)) return;
-
-    const row = btn.closest('tr');
-    const statusCell = row.querySelector('.status-tag');
-    statusCell.textContent = 'Suspended';
-    statusCell.className = 'status-tag suspended';
-
-    btn.textContent = 'Reactivate';
-    btn.className = 'btn-action reactivate';
-    btn.setAttribute('onclick', `reactivateUser('${username}', this)`);
-
-    row.dataset.status = 'suspended';
-    logAction('suspend', username);
-}
-
-function reactivateUser(username, btn) {
-    if (!confirm(`Reactivate @${username}?`)) return;
-
-    const row = btn.closest('tr');
-    const statusCell = row.querySelector('.status-tag');
-    statusCell.textContent = 'Active';
-    statusCell.className = 'status-tag active';
-
-    btn.textContent = 'Suspend';
-    btn.className = 'btn-action suspend';
-    btn.setAttribute('onclick', `suspendUser('${username}', this)`);
-
-    row.dataset.status = 'active';
-    logAction('reactivate', username);
-}
-
-// --- View User Modal ---
-const modal        = document.getElementById('userModal');
-const modalClose   = document.getElementById('modalClose');
-const modalCancel  = document.getElementById('modalCancelBtn');
-const modalAction  = document.getElementById('modalActionBtn');
-
-function viewUser(username) {
-    const user = users.find(u => u.username === username);
-    if (!user) return;
-
-    document.getElementById('modalUsername').textContent    = `@${user.username}`;
-    document.getElementById('modalDisplayName').textContent = user.displayName;
-    document.getElementById('modalRole').textContent        = user.role.charAt(0).toUpperCase() + user.role.slice(1);
-    document.getElementById('modalStatus').textContent      = user.status.charAt(0).toUpperCase() + user.status.slice(1);
-    document.getElementById('modalReports').textContent     = user.reports !== null ? user.reports : '—';
-
-    if (user.role === 'admin') {
-        modalAction.textContent = 'Cannot Modify Admin';
-        modalAction.disabled = true;
-        modalAction.style.opacity = '0.5';
-    } else if (user.status === 'active') {
-        modalAction.textContent = 'Suspend Account';
-        modalAction.disabled = false;
-        modalAction.style.opacity = '';
-        modalAction.onclick = () => { alert(`@${username} suspended. (logged)`); closeModal(); };
-    } else {
-        modalAction.textContent = 'Reactivate Account';
-        modalAction.disabled = false;
-        modalAction.style.opacity = '';
-        modalAction.onclick = () => { alert(`@${username} reactivated. (logged)`); closeModal(); };
-    }
-
+  }
+  function render() {
+    const users = visibleUsers();
+    tbody.innerHTML = users.map(user => `<tr data-role="${user.role}" data-status="${user.status}"><td>@${user.username}</td><td>${user.displayName || user.username}</td><td><span class="role-tag ${roleClass(user.role)}">${user.role[0].toUpperCase()+user.role.slice(1)}</span></td><td><span class="status-tag ${user.status}">${user.status[0].toUpperCase()+user.status.slice(1)}</span></td><td>${user.reports ?? 0}</td><td class="action-cell"><button class="btn-action view" data-view="${user.username}">View</button>${user.role === 'admin' ? '<button class="btn-action disabled" disabled>Suspend</button>' : user.status === 'active' ? `<button class="btn-action suspend" data-toggle="${user.username}">Suspend</button>` : `<button class="btn-action reactivate" data-toggle="${user.username}">Reactivate</button>`}</td></tr>`).join('');
+    resultCount.textContent = `Showing ${users.length} user${users.length === 1 ? '' : 's'}`;
+    emptyState.style.display = users.length ? 'none' : 'block';
+  }
+  function openModal(username) {
+    modalUser = App.findUser(username);
+    if (!modalUser) return;
+    document.getElementById('modalUsername').textContent = `@${modalUser.username}`;
+    document.getElementById('modalDisplayName').textContent = modalUser.displayName || modalUser.username;
+    document.getElementById('modalRole').textContent = modalUser.role;
+    document.getElementById('modalStatus').textContent = modalUser.status;
+    document.getElementById('modalReports').textContent = modalUser.reports ?? 0;
+    if (modalUser.role === 'admin') { modalAction.disabled = true; modalAction.textContent = 'Cannot Modify Admin'; }
+    else { modalAction.disabled = false; modalAction.textContent = modalUser.status === 'active' ? 'Suspend Account' : 'Reactivate Account'; }
     modal.style.display = 'flex';
-}
-
-function closeModal() {
-    modal.style.display = 'none';
-}
-
-modalClose.addEventListener('click', closeModal);
-modalCancel.addEventListener('click', closeModal);
-modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-// --- Audit log stub ---
-function logAction(action, target) {
-    console.log(`[AUDIT] Admin action: ${action} on @${target} at ${new Date().toISOString()}`);
-}
+  }
+  function closeModal() { modal.style.display = 'none'; }
+  function toggleUser(username) {
+    const target = App.findUser(username); if (!target || target.role === 'admin') return;
+    const nextStatus = target.status === 'active' ? 'suspended' : 'active';
+    App.updateUser(username, { status: nextStatus });
+    App.addAudit(nextStatus === 'active' ? 'User Reactivated' : 'User Suspended', `@${username}`);
+    render(); if (modal.style.display === 'flex') openModal(username);
+  }
+  tbody.addEventListener('click', (e) => { const view = e.target.dataset.view; const toggle = e.target.dataset.toggle; if (view) openModal(view); if (toggle) toggleUser(toggle); });
+  [searchInput, roleFilter, statusFilter].forEach(el => el.addEventListener(el.tagName === 'INPUT' ? 'input' : 'change', render));
+  searchBtn.onclick = render; modalClose.onclick = closeModal; modalCancel.onclick = closeModal; modal.onclick = (e) => { if (e.target === modal) closeModal(); }; modalAction.onclick = () => { if (modalUser) toggleUser(modalUser.username); };
+  render();
+})();
