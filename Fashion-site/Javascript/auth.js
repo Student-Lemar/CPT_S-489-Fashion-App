@@ -1,6 +1,7 @@
 export function getSession() {
   try {
-    return JSON.parse(localStorage.getItem("currentUser"));
+    // Keep in sync with `store.js` (FashionApp.KEYS.session)
+    return JSON.parse(localStorage.getItem("fashion_current_user_v2"));
   } catch {
     return null;
   }
