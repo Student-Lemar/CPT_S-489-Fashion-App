@@ -1,25 +1,28 @@
-import { api } from './client';
-import type { User, Report, AuditLogEntry, ReportStatus } from '../types';
+import { api } from "./client";
+import type { User, Report, AuditLogEntry, ReportStatus } from "../types";
 
 export const adminApi = {
   listUsers: (params?: { q?: string; role?: string; status?: string }) => {
     const qs = new URLSearchParams();
-    if (params?.q) qs.set('q', params.q);
-    if (params?.role) qs.set('role', params.role);
-    if (params?.status) qs.set('status', params.status);
+    if (params?.q) qs.set("q", params.q);
+    if (params?.role) qs.set("role", params.role);
+    if (params?.status) qs.set("status", params.status);
     const query = qs.toString();
-    return api.get<User[]>(`/admin/users${query ? `?${query}` : ''}`);
+    return api.get<User[]>(`/admin/users${query ? `?${query}` : ""}`);
   },
 
   toggleUserStatus: (username: string) =>
-    api.patch<User>(`/admin/users/${encodeURIComponent(username)}/toggle-status`, {}),
+    api.patch<User>(
+      `/admin/users/${encodeURIComponent(username)}/toggle-status`,
+      {},
+    ),
 
   listReports: (params?: { type?: string; status?: string }) => {
     const qs = new URLSearchParams();
-    if (params?.type) qs.set('type', params.type);
-    if (params?.status) qs.set('status', params.status);
+    if (params?.type) qs.set("type", params.type);
+    if (params?.status) qs.set("status", params.status);
     const query = qs.toString();
-    return api.get<Report[]>(`/admin/reports${query ? `?${query}` : ''}`);
+    return api.get<Report[]>(`/admin/reports${query ? `?${query}` : ""}`);
   },
 
   updateReport: (id: string, status: ReportStatus) =>
@@ -28,5 +31,5 @@ export const adminApi = {
   warnUser: (username: string) =>
     api.patch<User>(`/admin/users/${encodeURIComponent(username)}/warn`, {}),
 
-  auditLog: () => api.get<AuditLogEntry[]>('/admin/audit'),
+  auditLog: () => api.get<AuditLogEntry[]>("/admin/audit"),
 };

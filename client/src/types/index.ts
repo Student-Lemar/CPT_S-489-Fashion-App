@@ -1,7 +1,7 @@
 // ── User & Session ────────────────────────────────────────────────────────────
 
-export type UserRole = 'creator' | 'admin';
-export type UserStatus = 'active' | 'suspended';
+export type UserRole = "creator" | "admin";
+export type UserStatus = "active" | "suspended";
 
 export interface User {
   id: string;
@@ -22,7 +22,12 @@ export interface Session {
 
 // ── Item ──────────────────────────────────────────────────────────────────────
 
-export type ItemCategory = 'tops' | 'bottoms' | 'shoes' | 'outerwear' | 'accessories';
+export type ItemCategory =
+  | "tops"
+  | "bottoms"
+  | "shoes"
+  | "outerwear"
+  | "accessories";
 
 export interface Item {
   id: string;
@@ -30,7 +35,7 @@ export interface Item {
   name: string;
   category: ItemCategory;
   color: string;
-  colorExtracted?: string;   // server-side Jimp-extracted dominant color
+  colorExtracted?: string; // server-side Jimp-extracted dominant color
   icon?: string;
   tags: string[];
   notes?: string;
@@ -54,8 +59,8 @@ export interface Outfit {
   name: string;
   occasion: string;
   caption?: string;
-  items: string[];       // item IDs
-  itemIcons: string[];   // emoji icons (resolved at save time)
+  items: string[]; // item IDs
+  itemIcons: string[]; // emoji icons (resolved at save time)
   posted: boolean;
   boardIds: string[];
   likes: number;
@@ -66,7 +71,7 @@ export interface Outfit {
 
 // ── Board ─────────────────────────────────────────────────────────────────────
 
-export type BoardVisibility = 'private' | 'public';
+export type BoardVisibility = "private" | "public";
 
 export interface Board {
   id: string;
@@ -98,8 +103,8 @@ export interface FollowStatus {
 
 // ── Report ────────────────────────────────────────────────────────────────────
 
-export type ReportType = 'post' | 'board';
-export type ReportStatus = 'pending' | 'removed' | 'hidden' | 'resolved';
+export type ReportType = "post" | "board";
+export type ReportStatus = "pending" | "removed" | "hidden" | "resolved";
 
 export interface Report {
   id: string;
@@ -151,12 +156,22 @@ export interface ColorMeta {
   family: string;
 }
 
-export type HarmonyMode = 'monochrome' | 'analogous' | 'complementary' | 'neutral-balance' | 'auto';
-export type OccasionMode = 'everyday' | 'school' | 'office' | 'date-night' | 'streetwear';
-export type StyleMode = 'balanced' | 'minimal' | 'casual' | 'layered';
+export type HarmonyMode =
+  | "monochrome"
+  | "analogous"
+  | "complementary"
+  | "neutral-balance"
+  | "auto";
+export type OccasionMode =
+  | "everyday"
+  | "school"
+  | "office"
+  | "date-night"
+  | "streetwear";
+export type StyleMode = "balanced" | "minimal" | "casual" | "layered";
 
 export interface EnrichedItem extends Item {
-  aiColor: ColorMeta & { source: 'image' | 'manual'; colorName: string };
+  aiColor: ColorMeta & { source: "image" | "manual"; colorName: string };
 }
 
 export interface OutfitCombo {

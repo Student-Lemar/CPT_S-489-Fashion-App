@@ -1,26 +1,32 @@
-import { useState, useEffect, type FormEvent } from 'react';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { itemsApi } from '../api/items';
-import { colorsApi } from '../api/colors';
-import { getIconForCategory } from '../utils/helpers';
-import type { Item, ItemCategory } from '../types';
+import { useState, useEffect, type FormEvent } from "react";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
+import { itemsApi } from "../api/items";
+import { colorsApi } from "../api/colors";
+import { getIconForCategory } from "../utils/helpers";
+import type { Item, ItemCategory } from "../types";
 
-const CATEGORIES: ItemCategory[] = ['tops', 'bottoms', 'shoes', 'outerwear', 'accessories'];
-const COLORS = ['black', 'white', 'blue', 'gray', 'green', 'brown', 'pink'];
+const CATEGORIES: ItemCategory[] = [
+  "tops",
+  "bottoms",
+  "shoes",
+  "outerwear",
+  "accessories",
+];
+const COLORS = ["black", "white", "blue", "gray", "green", "brown", "pink"];
 
 export default function ItemDetail() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const isEdit = searchParams.get('mode') === 'edit';
+  const isEdit = searchParams.get("mode") === "edit";
 
   const [item, setItem] = useState<Item | null>(null);
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState<ItemCategory>('tops');
-  const [color, setColor] = useState('white');
-  const [tagsInput, setTagsInput] = useState('');
-  const [notes, setNotes] = useState('');
-  const [status, setStatus] = useState('');
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState<ItemCategory>("tops");
+  const [color, setColor] = useState("white");
+  const [tagsInput, setTagsInput] = useState("");
+  const [notes, setNotes] = useState("");
+  const [status, setStatus] = useState("");
   const [statusOk, setStatusOk] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -35,28 +41,40 @@ export default function ItemDetail() {
         setName(fetched.name);
         setCategory(fetched.category);
         setColor(fetched.color);
-        setTagsInput((fetched.tags ?? []).join(', '));
-        setNotes(fetched.notes ?? '');
+        setTagsInput((fetched.tags ?? []).join(", "));
+        setNotes(fetched.notes ?? "");
       })
-      .catch(() => setStatus('Item not found.'))
+      .catch(() => setStatus("Item not found."))
       .finally(() => setLoading(false));
   }, [id]);
 
   async function handleSave(e: FormEvent) {
     e.preventDefault();
     if (!item || !name || !category || !color) {
-      setStatusOk(false); setStatus('Please complete the required fields.'); return;
+      setStatusOk(false);
+      setStatus("Please complete the required fields.");
+      return;
     }
     setSubmitting(true);
     try {
-      const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+      const tags = tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
       const updated = await itemsApi.update(item.id, {
-        name, category, color, tags, notes, icon: getIconForCategory(category),
+        name,
+        category,
+        color,
+        tags,
+        notes,
+        icon: getIconForCategory(category),
       });
       setItem(updated);
-      setStatusOk(true); setStatus('Item updated successfully.');
+      setStatusOk(true);
+      setStatus("Item updated successfully.");
     } catch {
-      setStatusOk(false); setStatus('Failed to save changes.');
+      setStatusOk(false);
+      setStatus("Failed to save changes.");
     } finally {
       setSubmitting(false);
     }
@@ -65,41 +83,54 @@ export default function ItemDetail() {
   async function handleDelete() {
     if (!item || !confirm(`Delete "${item.name}"?`)) return;
     await itemsApi.remove(item.id);
-    navigate('/wardrobe');
+    navigate("/wardrobe");
   }
 
   async function handleExtractColor() {
     if (!item) return;
     if (!item.imageDataUrl) {
-      setStatusOk(false); setStatus('No image uploaded — add an image first to extract its color.'); return;
+      setStatusOk(false);
+      setStatus("No image uploaded — add an image first to extract its color.");
+      return;
     }
     setExtracting(true);
     try {
       const result = await colorsApi.extractColor(item.id);
-      setItem((prev) => prev ? { ...prev, colorExtracted: result.colorExtracted } : prev);
+      setItem((prev) =>
+        prev ? { ...prev, colorExtracted: result.colorExtracted } : prev,
+      );
       setStatusOk(true);
       setStatus(`Server extracted color: ${result.colorExtracted}`);
     } catch (err: unknown) {
       setStatusOk(false);
-      setStatus(err instanceof Error ? err.message : 'Color extraction failed.');
+      setStatus(
+        err instanceof Error ? err.message : "Color extraction failed.",
+      );
     } finally {
       setExtracting(false);
     }
   }
 
-  if (loading) return <div className="page"><div className="container">Loading…</div></div>;
+  if (loading)
+    return (
+      <div className="page">
+        <div className="container">Loading…</div>
+      </div>
+    );
 
-  const icon = item ? getIconForCategory(category) : '👕';
+  const icon = item ? getIconForCategory(category) : "👕";
 
   return (
     <div className="page">
       <div className="container">
         <div className="page-header">
           <div>
-            <h1>{isEdit ? 'Edit Item' : 'Item Detail'}</h1>
+            <h1>{isEdit ? "Edit Item" : "Item Detail"}</h1>
             <p>{item?.name}</p>
           </div>
-          <button className="back-link" onClick={() => navigate('/wardrobe')}>← Back to Wardrobe</button>
+          <button className="back-link" onClick={() => navigate("/wardrobe")}>
+            ← Back to Wardrobe
+          </button>
         </div>
 
         <section className="layout">
@@ -110,16 +141,35 @@ export default function ItemDetail() {
                 <img
                   src={item.imageDataUrl}
                   alt={item.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '18px' }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "18px",
+                  }}
                 />
               ) : (
-                <span style={{ fontSize: '3rem' }}>{icon}</span>
+                <span style={{ fontSize: "3rem" }}>{icon}</span>
               )}
             </div>
-            <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            <div
+              style={{
+                marginTop: "12px",
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap",
+              }}
+            >
               <span className="color-badge">{color}</span>
               {item?.colorExtracted && (
-                <span className="color-badge" style={{ background: '#f0fff4', color: '#1d7f45', borderColor: '#b7ebca' }}>
+                <span
+                  className="color-badge"
+                  style={{
+                    background: "#f0fff4",
+                    color: "#1d7f45",
+                    borderColor: "#b7ebca",
+                  }}
+                >
                   🎨 {item.colorExtracted} (extracted)
                 </span>
               )}
@@ -128,12 +178,16 @@ export default function ItemDetail() {
             <button
               type="button"
               className="btn btn-secondary"
-              style={{ marginTop: '12px', fontSize: '13px', width: '100%' }}
+              style={{ marginTop: "12px", fontSize: "13px", width: "100%" }}
               onClick={handleExtractColor}
               disabled={extracting || !item?.imageDataUrl}
-              title={!item?.imageDataUrl ? 'Upload an image to enable color extraction' : 'Run server-side color extraction using Jimp'}
+              title={
+                !item?.imageDataUrl
+                  ? "Upload an image to enable color extraction"
+                  : "Run server-side color extraction using Jimp"
+              }
             >
-              {extracting ? 'Extracting…' : '🎨 Extract Color from Image'}
+              {extracting ? "Extracting…" : "🎨 Extract Color from Image"}
             </button>
           </section>
 
@@ -160,7 +214,11 @@ export default function ItemDetail() {
                   onChange={(e) => setCategory(e.target.value as ItemCategory)}
                   disabled={!isEdit}
                 >
-                  {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -172,7 +230,11 @@ export default function ItemDetail() {
                   onChange={(e) => setColor(e.target.value)}
                   disabled={!isEdit}
                 >
-                  {COLORS.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {COLORS.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -200,28 +262,37 @@ export default function ItemDetail() {
               </div>
 
               {status && (
-                <p className={`status ${statusOk ? 'success' : 'error'}`} aria-live="polite">
+                <p
+                  className={`status ${statusOk ? "success" : "error"}`}
+                  aria-live="polite"
+                >
                   {status}
                 </p>
               )}
 
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                 {isEdit ? (
                   <>
-                    <button className="btn btn-primary" type="submit" disabled={submitting}>
-                      {submitting ? 'Saving…' : 'Save Changes'}
+                    <button
+                      className="btn btn-primary"
+                      type="submit"
+                      disabled={submitting}
+                    >
+                      {submitting ? "Saving…" : "Save Changes"}
                     </button>
                     <button
                       className="btn btn-secondary"
                       type="button"
-                      onClick={() => navigate(`/wardrobe/${encodeURIComponent(id!)}`)}
+                      onClick={() =>
+                        navigate(`/wardrobe/${encodeURIComponent(id!)}`)
+                      }
                     >
                       Cancel
                     </button>
                     <button
                       className="btn"
                       type="button"
-                      style={{ background: '#fee2e2', color: '#b42318' }}
+                      style={{ background: "#fee2e2", color: "#b42318" }}
                       onClick={handleDelete}
                     >
                       Delete
@@ -231,7 +302,9 @@ export default function ItemDetail() {
                   <button
                     className="btn btn-primary"
                     type="button"
-                    onClick={() => navigate(`/wardrobe/${encodeURIComponent(id!)}?mode=edit`)}
+                    onClick={() =>
+                      navigate(`/wardrobe/${encodeURIComponent(id!)}?mode=edit`)
+                    }
                   >
                     Edit Item
                   </button>

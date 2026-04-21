@@ -1,5 +1,5 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Topbar() {
   const { session, logout } = useAuth();
@@ -7,12 +7,12 @@ export default function Topbar() {
 
   async function handleLogout() {
     await logout();
-    navigate('/');
+    navigate("/");
   }
 
   const initials = session
     ? (session.displayName || session.username).slice(0, 1).toUpperCase()
-    : '';
+    : "";
 
   return (
     <header className="topbar">
@@ -29,7 +29,7 @@ export default function Topbar() {
               <NavLink to="/feed">Feed</NavLink>
             </>
           )}
-          {session?.role === 'admin' && (
+          {session?.role === "admin" && (
             <>
               <NavLink to="/">Home</NavLink>
               <NavLink to="/feed">Feed</NavLink>
@@ -38,7 +38,7 @@ export default function Topbar() {
               <NavLink to="/admin/moderation">Moderation</NavLink>
             </>
           )}
-          {session?.role === 'creator' && (
+          {session?.role === "creator" && (
             <>
               <NavLink to="/">Home</NavLink>
               <NavLink to="/feed">Feed</NavLink>
@@ -56,18 +56,30 @@ export default function Topbar() {
               <button
                 className="signin-link"
                 onClick={handleLogout}
-                style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
               >
                 Logout
               </button>
-              <Link className="avatar-btn" to="/profile" title={session.displayName}>
+              <Link
+                className="avatar-btn"
+                to="/profile"
+                title={session.displayName}
+              >
                 <span className="avatar-fallback">{initials}</span>
               </Link>
             </>
           ) : (
             <>
-              <Link className="signin-link" to="/login">Sign In</Link>
-              <Link className="signin-link" to="/register">Register</Link>
+              <Link className="signin-link" to="/login">
+                Sign In
+              </Link>
+              <Link className="signin-link" to="/register">
+                Register
+              </Link>
             </>
           )}
         </div>

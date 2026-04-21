@@ -1,7 +1,7 @@
-import { api } from './client';
-import type { Profile } from '../types';
+import { api } from "./client";
+import type { Profile } from "../types";
 
-export type UpdateProfilePayload = Partial<Omit<Profile, 'username'>>;
+export type UpdateProfilePayload = Partial<Omit<Profile, "username">>;
 
 export const profilesApi = {
   get: (username: string) =>

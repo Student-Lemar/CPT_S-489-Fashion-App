@@ -5,16 +5,20 @@ import React, {
   useEffect,
   useCallback,
   type ReactNode,
-} from 'react';
-import { authApi } from '../api/auth';
-import { ApiError } from '../api/client';
-import type { Session } from '../types';
+} from "react";
+import { authApi } from "../api/auth";
+import { ApiError } from "../api/client";
+import type { Session } from "../types";
 
 interface AuthContextValue {
   session: Session | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<Session>;
-  register: (username: string, password: string, displayName: string) => Promise<Session>;
+  register: (
+    username: string,
+    password: string,
+    displayName: string,
+  ) => Promise<Session>;
   logout: () => Promise<void>;
   /** Replace the in-memory session (e.g. after a profile update). */
   refreshSession: () => Promise<void>;
@@ -34,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .catch((err: unknown) => {
         // 401 = not logged in — treat as guest, don't surface an error.
         if (err instanceof ApiError && err.status === 401) return;
-        console.error('Failed to restore session:', err);
+        console.error("Failed to restore session:", err);
       })
       .finally(() => setLoading(false));
   }, []);
@@ -65,7 +69,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, loading, login, register, logout, refreshSession }}>
+    <AuthContext.Provider
+      value={{ session, loading, login, register, logout, refreshSession }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -73,6 +79,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>');
+  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>");
   return ctx;
 }

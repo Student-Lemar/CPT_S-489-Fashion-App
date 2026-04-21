@@ -1,51 +1,70 @@
-import { useState, useRef, type FormEvent, type ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { itemsApi } from '../api/items';
-import { colorsApi } from '../api/colors';
-import { getIconForCategory } from '../utils/helpers';
-import type { ItemCategory } from '../types';
+import { useState, useRef, type FormEvent, type ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { itemsApi } from "../api/items";
+import { colorsApi } from "../api/colors";
+import { getIconForCategory } from "../utils/helpers";
+import type { ItemCategory } from "../types";
 
-const CATEGORIES: ItemCategory[] = ['tops', 'bottoms', 'shoes', 'outerwear', 'accessories'];
-const COLORS = ['black', 'white', 'blue', 'gray', 'green', 'brown', 'pink'];
+const CATEGORIES: ItemCategory[] = [
+  "tops",
+  "bottoms",
+  "shoes",
+  "outerwear",
+  "accessories",
+];
+const COLORS = ["black", "white", "blue", "gray", "green", "brown", "pink"];
 
 export default function AddItem() {
   const navigate = useNavigate();
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState<ItemCategory>('tops');
-  const [color, setColor] = useState('white');
-  const [tagsInput, setTagsInput] = useState('');
-  const [notes, setNotes] = useState('');
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState<ItemCategory>("tops");
+  const [color, setColor] = useState("white");
+  const [tagsInput, setTagsInput] = useState("");
+  const [notes, setNotes] = useState("");
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const [statusOk, setStatusOk] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) { setImageDataUrl(null); return; }
+    if (!file) {
+      setImageDataUrl(null);
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => setImageDataUrl(ev.target?.result as string);
     reader.readAsDataURL(file);
   }
 
   function handleReset() {
-    setName(''); setCategory('tops'); setColor('white');
-    setTagsInput(''); setNotes(''); setImageDataUrl(null);
-    setStatus(''); if (fileRef.current) fileRef.current.value = '';
+    setName("");
+    setCategory("tops");
+    setColor("white");
+    setTagsInput("");
+    setNotes("");
+    setImageDataUrl(null);
+    setStatus("");
+    if (fileRef.current) fileRef.current.value = "";
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!name || !category || !color) {
       setStatusOk(false);
-      setStatus('Please complete the required fields: item name, category, and dominant color.');
+      setStatus(
+        "Please complete the required fields: item name, category, and dominant color.",
+      );
       return;
     }
     setSubmitting(true);
     try {
-      const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+      const tags = tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
       const created = await itemsApi.create({
         name,
         category,
@@ -58,14 +77,16 @@ export default function AddItem() {
       });
       // If an image was uploaded, trigger server-side color extraction in the background
       if (imageDataUrl && created.id) {
-        colorsApi.extractColor(created.id).catch(() => {/* non-critical */});
+        colorsApi.extractColor(created.id).catch(() => {
+          /* non-critical */
+        });
       }
       setStatusOk(true);
-      setStatus('Item saved. Redirecting…');
-      setTimeout(() => navigate('/wardrobe'), 500);
+      setStatus("Item saved. Redirecting…");
+      setTimeout(() => navigate("/wardrobe"), 500);
     } catch (err) {
       setStatusOk(false);
-      setStatus('Failed to save item. Please try again.');
+      setStatus("Failed to save item. Please try again.");
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -80,7 +101,9 @@ export default function AddItem() {
             <h1>Add Item</h1>
             <p>Upload a new clothing item to your wardrobe.</p>
           </div>
-          <button className="back-link" onClick={() => navigate('/wardrobe')}>← Back to Wardrobe</button>
+          <button className="back-link" onClick={() => navigate("/wardrobe")}>
+            ← Back to Wardrobe
+          </button>
         </div>
 
         <section className="layout">
@@ -90,29 +113,31 @@ export default function AddItem() {
               id="uploadPreview"
               className="upload-preview"
               onClick={() => fileRef.current?.click()}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: "pointer" }}
               aria-label="Click to upload image"
             >
               {imageDataUrl ? (
                 <img src={imageDataUrl} alt="Preview" />
               ) : (
-                <span style={{ fontSize: '3rem' }}>{getIconForCategory(category)}</span>
+                <span style={{ fontSize: "3rem" }}>
+                  {getIconForCategory(category)}
+                </span>
               )}
             </div>
             <input
               ref={fileRef}
               type="file"
               accept="image/*"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handleImageChange}
             />
             <button
               className="btn btn-secondary"
               type="button"
               onClick={() => fileRef.current?.click()}
-              style={{ marginTop: '12px', width: '100%' }}
+              style={{ marginTop: "12px", width: "100%" }}
             >
-              {imageDataUrl ? 'Change Photo' : 'Upload Photo'}
+              {imageDataUrl ? "Change Photo" : "Upload Photo"}
             </button>
           </section>
 
@@ -133,18 +158,30 @@ export default function AddItem() {
 
               <div className="field">
                 <label htmlFor="itemCategory">Category *</label>
-                <select id="itemCategory" value={category} onChange={(e) => setCategory(e.target.value as ItemCategory)}>
+                <select
+                  id="itemCategory"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as ItemCategory)}
+                >
                   {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
 
               <div className="field">
                 <label htmlFor="itemColor">Dominant color *</label>
-                <select id="itemColor" value={color} onChange={(e) => setColor(e.target.value)}>
+                <select
+                  id="itemColor"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                >
                   {COLORS.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -172,16 +209,27 @@ export default function AddItem() {
               </div>
 
               {status && (
-                <p className={`status ${statusOk ? 'success' : 'error'}`} aria-live="polite">
+                <p
+                  className={`status ${statusOk ? "success" : "error"}`}
+                  aria-live="polite"
+                >
                   {status}
                 </p>
               )}
 
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button className="btn btn-primary" type="submit" disabled={submitting}>
-                  {submitting ? 'Saving…' : 'Save Item'}
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
+                  className="btn btn-primary"
+                  type="submit"
+                  disabled={submitting}
+                >
+                  {submitting ? "Saving…" : "Save Item"}
                 </button>
-                <button className="btn btn-secondary" type="button" onClick={handleReset}>
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={handleReset}
+                >
                   Reset
                 </button>
               </div>

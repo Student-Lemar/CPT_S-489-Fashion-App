@@ -1,5 +1,5 @@
-import { api } from './client';
-import type { FollowStatus } from '../types';
+import { api } from "./client";
+import type { FollowStatus } from "../types";
 
 export const followsApi = {
   status: (username: string) =>

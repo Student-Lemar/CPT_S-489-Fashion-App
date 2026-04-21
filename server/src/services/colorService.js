@@ -5,55 +5,88 @@
  * Uses Jimp for image-based color extraction (no browser canvas required).
  */
 
-'use strict';
+"use strict";
 
 // ── Color map ─────────────────────────────────────────────────────────────────
 
 const COLOR_MAP = {
-  black:  { hex: '#1e1e1e', hue: null, neutral: true,  family: 'neutral' },
-  white:  { hex: '#f6f6f3', hue: null, neutral: true,  family: 'neutral' },
-  gray:   { hex: '#8f949c', hue: null, neutral: true,  family: 'neutral' },
-  brown:  { hex: '#8b5a3c', hue: 28,   neutral: true,  family: 'earth'   },
-  blue:   { hex: '#4a78d1', hue: 220,  neutral: false, family: 'cool'    },
-  green:  { hex: '#5a8f4d', hue: 120,  neutral: false, family: 'earth'   },
-  pink:   { hex: '#e07ca8', hue: 330,  neutral: false, family: 'warm'    },
-  red:    { hex: '#c34a3f', hue: 5,    neutral: false, family: 'warm'    },
-  orange: { hex: '#d88336', hue: 28,   neutral: false, family: 'warm'    },
-  yellow: { hex: '#d9c44e', hue: 55,   neutral: false, family: 'warm'    },
-  purple: { hex: '#7f63c9', hue: 270,  neutral: false, family: 'cool'    },
+  black: { hex: "#1e1e1e", hue: null, neutral: true, family: "neutral" },
+  white: { hex: "#f6f6f3", hue: null, neutral: true, family: "neutral" },
+  gray: { hex: "#8f949c", hue: null, neutral: true, family: "neutral" },
+  brown: { hex: "#8b5a3c", hue: 28, neutral: true, family: "earth" },
+  blue: { hex: "#4a78d1", hue: 220, neutral: false, family: "cool" },
+  green: { hex: "#5a8f4d", hue: 120, neutral: false, family: "earth" },
+  pink: { hex: "#e07ca8", hue: 330, neutral: false, family: "warm" },
+  red: { hex: "#c34a3f", hue: 5, neutral: false, family: "warm" },
+  orange: { hex: "#d88336", hue: 28, neutral: false, family: "warm" },
+  yellow: { hex: "#d9c44e", hue: 55, neutral: false, family: "warm" },
+  purple: { hex: "#7f63c9", hue: 270, neutral: false, family: "cool" },
 };
 
 const OCCASION_RULES = {
-  everyday:    { tags: ['casual', 'daily', 'basic', 'clean', 'cozy'],              multiplier: 1    },
-  school:      { tags: ['campus', 'casual', 'cozy', 'daily', 'layering'],          multiplier: 1.05 },
-  office:      { tags: ['smart', 'office', 'clean', 'minimal', 'dressy'],          multiplier: 1.1  },
-  'date-night':{ tags: ['night', 'dressy', 'clean', 'streetwear'],                 multiplier: 1.1  },
-  streetwear:  { tags: ['streetwear', 'oversized', 'utility', 'layering'],         multiplier: 1.1  },
+  everyday: {
+    tags: ["casual", "daily", "basic", "clean", "cozy"],
+    multiplier: 1,
+  },
+  school: {
+    tags: ["campus", "casual", "cozy", "daily", "layering"],
+    multiplier: 1.05,
+  },
+  office: {
+    tags: ["smart", "office", "clean", "minimal", "dressy"],
+    multiplier: 1.1,
+  },
+  "date-night": {
+    tags: ["night", "dressy", "clean", "streetwear"],
+    multiplier: 1.1,
+  },
+  streetwear: {
+    tags: ["streetwear", "oversized", "utility", "layering"],
+    multiplier: 1.1,
+  },
 };
 
 const STYLE_RULES = {
-  balanced: ['clean', 'basic', 'daily', 'minimal'],
-  minimal:  ['minimal', 'clean', 'basic'],
-  casual:   ['casual', 'cozy', 'daily'],
-  layered:  ['layering', 'oversized', 'cozy', 'streetwear'],
+  balanced: ["clean", "basic", "daily", "minimal"],
+  minimal: ["minimal", "clean", "basic"],
+  casual: ["casual", "cozy", "daily"],
+  layered: ["layering", "oversized", "cozy", "streetwear"],
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function normalizeColorName(name) {
-  const v = String(name || '').trim().toLowerCase();
-  if (v.includes('navy') || v.includes('blue')) return 'blue';
-  if (v.includes('olive') || v.includes('sage') || v.includes('green')) return 'green';
-  if (v.includes('tan') || v.includes('beige') || v.includes('khaki') || v.includes('brown')) return 'brown';
-  if (v.includes('charcoal') || v.includes('grey') || v.includes('gray') || v.includes('silver')) return 'gray';
-  if (v.includes('cream') || v.includes('ivory') || v.includes('white')) return 'white';
-  if (v.includes('black')) return 'black';
-  if (v.includes('pink') || v.includes('rose')) return 'pink';
-  if (v.includes('red') || v.includes('maroon') || v.includes('burgundy')) return 'red';
-  if (v.includes('orange') || v.includes('rust')) return 'orange';
-  if (v.includes('yellow') || v.includes('gold')) return 'yellow';
-  if (v.includes('purple') || v.includes('lavender') || v.includes('violet')) return 'purple';
-  return COLOR_MAP[v] ? v : 'gray';
+  const v = String(name || "")
+    .trim()
+    .toLowerCase();
+  if (v.includes("navy") || v.includes("blue")) return "blue";
+  if (v.includes("olive") || v.includes("sage") || v.includes("green"))
+    return "green";
+  if (
+    v.includes("tan") ||
+    v.includes("beige") ||
+    v.includes("khaki") ||
+    v.includes("brown")
+  )
+    return "brown";
+  if (
+    v.includes("charcoal") ||
+    v.includes("grey") ||
+    v.includes("gray") ||
+    v.includes("silver")
+  )
+    return "gray";
+  if (v.includes("cream") || v.includes("ivory") || v.includes("white"))
+    return "white";
+  if (v.includes("black")) return "black";
+  if (v.includes("pink") || v.includes("rose")) return "pink";
+  if (v.includes("red") || v.includes("maroon") || v.includes("burgundy"))
+    return "red";
+  if (v.includes("orange") || v.includes("rust")) return "orange";
+  if (v.includes("yellow") || v.includes("gold")) return "yellow";
+  if (v.includes("purple") || v.includes("lavender") || v.includes("violet"))
+    return "purple";
+  return COLOR_MAP[v] ? v : "gray";
 }
 
 function getColorMeta(name) {
@@ -61,7 +94,7 @@ function getColorMeta(name) {
 }
 
 function rgbFromHex(hex) {
-  const c = hex.replace('#', '');
+  const c = hex.replace("#", "");
   return {
     r: parseInt(c.slice(0, 2), 16),
     g: parseInt(c.slice(2, 4), 16),
@@ -70,12 +103,15 @@ function rgbFromHex(hex) {
 }
 
 function nearestNamedColor({ r, g, b }) {
-  let bestName = 'gray';
+  let bestName = "gray";
   let bestDist = Infinity;
   for (const [name, meta] of Object.entries(COLOR_MAP)) {
     const s = rgbFromHex(meta.hex);
     const dist = Math.sqrt((r - s.r) ** 2 + (g - s.g) ** 2 + (b - s.b) ** 2);
-    if (dist < bestDist) { bestDist = dist; bestName = name; }
+    if (dist < bestDist) {
+      bestDist = dist;
+      bestName = name;
+    }
   }
   return bestName;
 }
@@ -91,10 +127,10 @@ function nearestNamedColor({ r, g, b }) {
 async function extractColorFromDataUrl(dataUrl) {
   try {
     // Strip data URL prefix to get raw base64
-    const base64 = dataUrl.replace(/^data:image\/[a-z+]+;base64,/i, '');
-    const buffer = Buffer.from(base64, 'base64');
+    const base64 = dataUrl.replace(/^data:image\/[a-z+]+;base64,/i, "");
+    const buffer = Buffer.from(base64, "base64");
 
-    const Jimp = require('jimp');
+    const Jimp = require("jimp");
     const image = await Jimp.read(buffer);
 
     // Resize to a small thumb for speed
@@ -102,7 +138,10 @@ async function extractColorFromDataUrl(dataUrl) {
     image.resize(THUMB, Jimp.AUTO);
 
     const { width, height } = image.bitmap;
-    let rSum = 0, gSum = 0, bSum = 0, count = 0;
+    let rSum = 0,
+      gSum = 0,
+      bSum = 0,
+      count = 0;
 
     image.scan(0, 0, width, height, function (x, y, idx) {
       const alpha = this.bitmap.data[idx + 3];
@@ -114,7 +153,10 @@ async function extractColorFromDataUrl(dataUrl) {
       const brightness = (rv + gv + bv) / 3;
       if (brightness > 248) return; // skip near-white background
 
-      rSum += rv; gSum += gv; bSum += bv; count++;
+      rSum += rv;
+      gSum += gv;
+      bSum += bv;
+      count++;
     });
 
     if (!count) return null;
@@ -124,7 +166,7 @@ async function extractColorFromDataUrl(dataUrl) {
       b: Math.round(bSum / count),
     });
   } catch (err) {
-    console.warn('[colorService] extractColorFromDataUrl failed:', err.message);
+    console.warn("[colorService] extractColorFromDataUrl failed:", err.message);
     return null;
   }
 }
@@ -138,14 +180,18 @@ function hueDistance(a, b) {
 }
 
 function pairHarmonyScore(a, b, harmony) {
-  const ca = a.aiColor; const cb = b.aiColor;
+  const ca = a.aiColor;
+  const cb = b.aiColor;
   if (!ca || !cb) return 0;
-  if (ca.neutral || cb.neutral) return harmony === 'neutral-balance' ? 12 : 8;
+  if (ca.neutral || cb.neutral) return harmony === "neutral-balance" ? 12 : 8;
   const dist = hueDistance(ca.hue, cb.hue);
-  if (harmony === 'monochrome')      return Math.max(0, 20 - dist / 4);
-  if (harmony === 'analogous')       return dist <= 45 ? 20 - dist / 3 : Math.max(0, 6 - dist / 30);
-  if (harmony === 'complementary')   return Math.max(0, 22 - Math.abs(180 - dist) / 4);
-  if (harmony === 'neutral-balance') return ca.neutral || cb.neutral ? 14 : Math.max(0, 10 - dist / 10);
+  if (harmony === "monochrome") return Math.max(0, 20 - dist / 4);
+  if (harmony === "analogous")
+    return dist <= 45 ? 20 - dist / 3 : Math.max(0, 6 - dist / 30);
+  if (harmony === "complementary")
+    return Math.max(0, 22 - Math.abs(180 - dist) / 4);
+  if (harmony === "neutral-balance")
+    return ca.neutral || cb.neutral ? 14 : Math.max(0, 10 - dist / 10);
   return Math.max(0, 12 - Math.abs(90 - dist) / 10);
 }
 
@@ -163,39 +209,59 @@ function scoreCombo(combo, { harmony, occasion, style, preferredColor }) {
     pairHarmonyScore(combo.bottom, combo.shoes, harmony);
 
   if (combo.extras?.length)
-    score += combo.extras.reduce((s, e) => s + pairHarmonyScore(combo.top, e, harmony) / 2, 0);
+    score += combo.extras.reduce(
+      (s, e) => s + pairHarmonyScore(combo.top, e, harmony) / 2,
+      0,
+    );
 
   const rule = OCCASION_RULES[occasion] ?? OCCASION_RULES.everyday;
-  score += items.reduce((s, i) => s + tagScore(i, rule.tags), 0) * 2 * rule.multiplier;
-  score += items.reduce((s, i) => s + tagScore(i, STYLE_RULES[style] ?? []), 0) * 1.6;
+  score +=
+    items.reduce((s, i) => s + tagScore(i, rule.tags), 0) * 2 * rule.multiplier;
+  score +=
+    items.reduce((s, i) => s + tagScore(i, STYLE_RULES[style] ?? []), 0) * 1.6;
 
   const unique = new Set(items.map((i) => i.aiColor.colorName)).size;
-  if (harmony === 'monochrome'      && unique <= 2) score += 10;
-  if (harmony === 'analogous'       && unique <= 3) score += 6;
-  if (harmony === 'neutral-balance' && items.filter((i) => i.aiColor.neutral).length >= 2) score += 12;
+  if (harmony === "monochrome" && unique <= 2) score += 10;
+  if (harmony === "analogous" && unique <= 3) score += 6;
+  if (
+    harmony === "neutral-balance" &&
+    items.filter((i) => i.aiColor.neutral).length >= 2
+  )
+    score += 12;
 
-  if (preferredColor && preferredColor !== 'any')
-    score += items.filter((i) => i.aiColor.colorName === preferredColor).length * 5;
+  if (preferredColor && preferredColor !== "any")
+    score +=
+      items.filter((i) => i.aiColor.colorName === preferredColor).length * 5;
 
-  if (style === 'layered' && combo.extras?.some((i) => i.category === 'outerwear')) score += 10;
-  if (occasion === 'office' && items.some((i) => (i.tags || []).includes('dressy'))) score += 6;
+  if (
+    style === "layered" &&
+    combo.extras?.some((i) => i.category === "outerwear")
+  )
+    score += 10;
+  if (
+    occasion === "office" &&
+    items.some((i) => (i.tags || []).includes("dressy"))
+  )
+    score += 6;
 
   return Math.round(score * 10) / 10;
 }
 
 function comboItems(combo) {
-  return [combo.top, combo.bottom, combo.shoes, ...(combo.extras ?? [])].filter(Boolean);
+  return [combo.top, combo.bottom, combo.shoes, ...(combo.extras ?? [])].filter(
+    Boolean,
+  );
 }
 
 function autoHarmony(items) {
   const colorful = items.filter((i) => !i.aiColor.neutral);
-  if (!colorful.length) return 'neutral-balance';
+  if (!colorful.length) return "neutral-balance";
   const hues = colorful.map((i) => i.aiColor.hue).filter((h) => h != null);
-  if (!hues.length) return 'neutral-balance';
+  if (!hues.length) return "neutral-balance";
   const spread = Math.max(...hues) - Math.min(...hues);
-  if (spread <= 20) return 'monochrome';
-  if (spread <= 50) return 'analogous';
-  return 'complementary';
+  if (spread <= 20) return "monochrome";
+  if (spread <= 50) return "analogous";
+  return "complementary";
 }
 
 function chooseOptional(primary, optionals, harmony, filterColor) {
@@ -206,7 +272,12 @@ function chooseOptional(primary, optionals, harmony, filterColor) {
         pairHarmonyScore(primary.top, item, harmony) +
         pairHarmonyScore(primary.bottom, item, harmony) +
         pairHarmonyScore(primary.shoes, item, harmony);
-      if (filterColor && filterColor !== 'any' && normalizeColorName(item.aiColor?.colorName ?? item.color) === filterColor)
+      if (
+        filterColor &&
+        filterColor !== "any" &&
+        normalizeColorName(item.aiColor?.colorName ?? item.color) ===
+          filterColor
+      )
         score += 4;
       return { item, score };
     })
@@ -231,7 +302,11 @@ function enrichItem(item) {
   const colorName = normalizeColorName(raw.colorExtracted || raw.color);
   return {
     ...raw,
-    aiColor: { colorName, source: raw.colorExtracted ? 'image' : 'manual', ...getColorMeta(colorName) },
+    aiColor: {
+      colorName,
+      source: raw.colorExtracted ? "image" : "manual",
+      ...getColorMeta(colorName),
+    },
   };
 }
 
@@ -247,17 +322,17 @@ function enrichItem(item) {
  */
 function generateSuggestions(items, filters = {}, maxSuggestions = 3) {
   const {
-    harmony: requestedHarmony = 'auto',
-    occasion = 'everyday',
-    style = 'balanced',
-    preferredColor = 'any',
+    harmony: requestedHarmony = "auto",
+    occasion = "everyday",
+    style = "balanced",
+    preferredColor = "any",
   } = filters;
 
-  const tops       = items.filter((i) => i.category === 'tops');
-  const bottoms    = items.filter((i) => i.category === 'bottoms');
-  const shoes      = items.filter((i) => i.category === 'shoes');
-  const outerwear  = items.filter((i) => i.category === 'outerwear');
-  const accessories= items.filter((i) => i.category === 'accessories');
+  const tops = items.filter((i) => i.category === "tops");
+  const bottoms = items.filter((i) => i.category === "bottoms");
+  const shoes = items.filter((i) => i.category === "shoes");
+  const outerwear = items.filter((i) => i.category === "outerwear");
+  const accessories = items.filter((i) => i.category === "accessories");
 
   if (!tops.length || !bottoms.length || !shoes.length) {
     return [];
@@ -265,7 +340,8 @@ function generateSuggestions(items, filters = {}, maxSuggestions = 3) {
 
   // Determine harmony for scoring
   const allColored = [...tops, ...bottoms, ...shoes];
-  const harmony = requestedHarmony === 'auto' ? autoHarmony(allColored) : requestedHarmony;
+  const harmony =
+    requestedHarmony === "auto" ? autoHarmony(allColored) : requestedHarmony;
 
   // Build combos: top × bottom × shoes (capped to avoid combinatorial explosion)
   const combos = [];
@@ -273,7 +349,12 @@ function generateSuggestions(items, filters = {}, maxSuggestions = 3) {
     for (const bottom of bottoms.slice(0, 8)) {
       for (const shoe of shoes.slice(0, 8)) {
         const primary = { top, bottom, shoes: shoe };
-        const extras = chooseOptional(primary, [...outerwear, ...accessories], harmony, preferredColor);
+        const extras = chooseOptional(
+          primary,
+          [...outerwear, ...accessories],
+          harmony,
+          preferredColor,
+        );
         combos.push({ ...primary, extras });
       }
     }
@@ -281,7 +362,10 @@ function generateSuggestions(items, filters = {}, maxSuggestions = 3) {
 
   // Score and sort
   const scored = combos
-    .map((combo) => ({ combo, score: scoreCombo(combo, { harmony, occasion, style, preferredColor }) }))
+    .map((combo) => ({
+      combo,
+      score: scoreCombo(combo, { harmony, occasion, style, preferredColor }),
+    }))
     .sort((a, b) => b.score - a.score);
 
   // De-duplicate: ensure different tops/bottoms across top suggestions

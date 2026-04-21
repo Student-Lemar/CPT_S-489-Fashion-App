@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { itemsApi } from '../api/items';
-import { outfitsApi } from '../api/outfits';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { itemsApi } from "../api/items";
+import { outfitsApi } from "../api/outfits";
 
 export default function Dashboard() {
   const { session } = useAuth();
@@ -19,16 +19,16 @@ export default function Dashboard() {
   }, []);
 
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-  const name = session?.displayName || session?.username || '';
+  const greeting =
+    hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const name = session?.displayName || session?.username || "";
 
   return (
     <div className="page">
       <div className="container">
         <div className="dashboard-welcome">
           <h1>
-            {greeting},{' '}
-            <span className="highlight-text">{name}</span>!
+            {greeting}, <span className="highlight-text">{name}</span>!
           </h1>
           <p>Here's a snapshot of your wardrobe activity.</p>
         </div>
@@ -43,7 +43,9 @@ export default function Dashboard() {
             <div className="stat-label">Saved Outfits</div>
           </div>
           <div className="stat-card card">
-            <div className="stat-number">{session?.role === 'creator' ? 'Creator' : session?.role}</div>
+            <div className="stat-number">
+              {session?.role === "creator" ? "Creator" : session?.role}
+            </div>
             <div className="stat-label">Account Type</div>
           </div>
         </div>

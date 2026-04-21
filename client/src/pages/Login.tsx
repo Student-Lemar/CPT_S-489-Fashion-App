@@ -1,23 +1,29 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { ApiError } from '../api/client';
+import { useState, type FormEvent } from "react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { ApiError } from "../api/client";
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
-  const next = params.get('next');
+  const next = params.get("next");
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   function safeNext(role: string) {
-    if (next && !next.includes('://') && !next.includes('..') && !next.includes('\\')) return next;
-    return role === 'admin' ? '/admin' : '/dashboard';
+    if (
+      next &&
+      !next.includes("://") &&
+      !next.includes("..") &&
+      !next.includes("\\")
+    )
+      return next;
+    return role === "admin" ? "/admin" : "/dashboard";
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -26,14 +32,17 @@ export default function Login() {
     try {
       const session = await login(username.trim(), password);
       setIsError(false);
-      setMessage('Login successful! Redirecting…');
-      setTimeout(() => navigate(safeNext(session.role), { replace: true }), 400);
+      setMessage("Login successful! Redirecting…");
+      setTimeout(
+        () => navigate(safeNext(session.role), { replace: true }),
+        400,
+      );
     } catch (err) {
       setIsError(true);
       if (err instanceof ApiError) {
         setMessage(err.message);
       } else {
-        setMessage('Incorrect username or password.');
+        setMessage("Incorrect username or password.");
       }
     } finally {
       setSubmitting(false);
@@ -52,7 +61,9 @@ export default function Login() {
       <div className="login-right">
         <div className="login-card">
           <h1>Sign in</h1>
-          <p className="login-sub">Welcome back — pick up where you left off.</p>
+          <p className="login-sub">
+            Welcome back — pick up where you left off.
+          </p>
 
           <form id="loginForm" onSubmit={handleSubmit} noValidate>
             <div className="field">
@@ -84,7 +95,7 @@ export default function Login() {
             {message && (
               <p
                 className="status"
-                style={{ color: isError ? '#d64545' : '#2a9d50' }}
+                style={{ color: isError ? "#d64545" : "#2a9d50" }}
                 aria-live="polite"
               >
                 {message}
@@ -95,9 +106,9 @@ export default function Login() {
               className="btn btn-primary"
               type="submit"
               disabled={submitting}
-              style={{ width: '100%', marginTop: '8px' }}
+              style={{ width: "100%", marginTop: "8px" }}
             >
-              {submitting ? 'Signing in…' : 'Sign In'}
+              {submitting ? "Signing in…" : "Sign In"}
             </button>
           </form>
 
@@ -106,12 +117,20 @@ export default function Login() {
               className="text-btn"
               type="button"
               onClick={() =>
-                setMessage('Use one of the demo passwords from your seeded account list, or register a new account.')
+                setMessage(
+                  "Use one of the demo passwords from your seeded account list, or register a new account.",
+                )
               }
             >
               Forgot password?
             </button>
-            <Link to={next ? `/register?next=${encodeURIComponent(next)}` : '/register'}>
+            <Link
+              to={
+                next
+                  ? `/register?next=${encodeURIComponent(next)}`
+                  : "/register"
+              }
+            >
               Create an account
             </Link>
           </div>
