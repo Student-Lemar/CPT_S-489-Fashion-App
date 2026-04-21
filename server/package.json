@@ -8,9 +8,14 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon --watch src --ext js --signal SIGTERM src/index.js",
+    "test": "jest",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:seed": "sequelize-cli db:seed:all"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/src/__tests__/**/*.test.js"]
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -26,8 +31,10 @@
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "jest": "^30.3.0",
     "nodemon": "^3.1.9",
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "supertest": "^7.2.2"
   },
   "engines": {
     "node": ">=18"
