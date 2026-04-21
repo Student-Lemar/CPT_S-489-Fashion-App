@@ -46,6 +46,11 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT('long'),
         allowNull: true
       },
+      colorExtracted: {
+        type: DataTypes.STRING(64),
+        allowNull: true,
+        comment: 'Server-side extracted dominant color name (overrides manual color for AI scoring)'
+      },
       addedAt: {
         type: DataTypes.DATE,
         allowNull: false

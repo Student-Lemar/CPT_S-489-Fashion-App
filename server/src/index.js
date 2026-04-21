@@ -26,7 +26,7 @@ function buildCorsMiddleware() {
   const allowlist = new Set(
     (configured && configured.length
       ? configured
-      : [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`])
+      : [`http://localhost:${PORT}`, `http://127.0.0.1:${PORT}`, 'http://localhost:5173', 'http://127.0.0.1:5173'])
   );
 
   if (isProd && (!configured || configured.length === 0)) {
