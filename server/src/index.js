@@ -100,6 +100,7 @@ async function main() {
 
   // Static site (existing prototype UI)
   app.use(express.static(STATIC_DIR));
+  app.use(express.static(path.join(STATIC_DIR, "pages_html")));
 
   // Friendly entry route
   app.get("/", (req, res) => {
