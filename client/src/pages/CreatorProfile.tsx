@@ -24,22 +24,42 @@ export default function CreatorProfile() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      profilesApi.get(handle),
-      feedApi.list(),
-      session ? followsApi.status(handle) : Promise.resolve(null),
-    ])
-      .then(([prof, allPosts, fs]) => {
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      try {
+        // Canonicalize via the server's profile record. This avoids a broken state
+        // when the URL casing doesn't match the stored username casing.
+        const prof = await profilesApi.get(handle);
+        if (cancelled) return;
         setProfile(prof);
+
+        const [allPosts, fs] = await Promise.all([
+          feedApi.list(),
+          session ? followsApi.status(prof.username) : Promise.resolve(null),
+        ]);
+        if (cancelled) return;
+
+        const canonical = String(prof.username).toLowerCase();
         setPosts(
           allPosts.filter(
-            (p) => String(p.creator).toLowerCase() === handle.toLowerCase(),
+            (p) => String(p.creator || "").toLowerCase() === canonical,
           ),
         );
         if (fs) setFollowStatus(fs);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+      } catch (err) {
+        if (cancelled) return;
+        console.error(err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, [handle, session]);
 
   async function handleFollow() {
@@ -48,11 +68,12 @@ export default function CreatorProfile() {
       return;
     }
     try {
+      const target = profile?.username ?? handle;
       if (followStatus.following) {
-        const updated = await followsApi.unfollow(handle);
+        const updated = await followsApi.unfollow(target);
         setFollowStatus(updated);
       } else {
-        const updated = await followsApi.follow(handle);
+        const updated = await followsApi.follow(target);
         setFollowStatus(updated);
       }
     } catch (err) {
@@ -75,7 +96,10 @@ export default function CreatorProfile() {
       </div>
     );
 
-  const isSelf = session?.username === handle;
+  const isSelf =
+    !!session &&
+    !!profile &&
+    session.username.toLowerCase() === profile.username.toLowerCase();
 
   return (
     <div className="page">
