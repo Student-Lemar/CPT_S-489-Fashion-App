@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Item Detail - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/item-detail.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="page-header">
+        <div>
+          <h1>Item Detail</h1>
+          <p>View, edit, or remove a clothing item from your wardrobe.</p>
+        </div>
+
+        <a class="back-link" href="wardrobe.html">← Back to Wardrobe</a>
+      </div>
+
+      <section class="layout">
+        <section class="card preview-card">
+          <div class="item-visual" id="itemVisual">👕</div>
+          <div class="meta-badges">
+            <span class="badge" id="colorBadge">Color</span>
+            <span class="badge muted" id="categoryBadge">Category</span>
+          </div>
+        </section>
+
+        <section class="card form-card">
+          <form id="itemForm" novalidate>
+            <div class="field">
+              <label for="itemName">Item Name</label>
+              <input id="itemName" type="text" />
+            </div>
+
+            <div class="field">
+              <label for="itemCategory">Category</label>
+              <select id="itemCategory">
+                <option value="tops">Tops</option>
+                <option value="bottoms">Bottoms</option>
+                <option value="shoes">Shoes</option>
+                <option value="outerwear">Outerwear</option>
+                <option value="accessories">Accessories</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="itemColor">Dominant Color</label>
+              <select id="itemColor">
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="blue">Blue</option>
+                <option value="gray">Gray</option>
+                <option value="green">Green</option>
+                <option value="brown">Brown</option>
+                <option value="pink">Pink</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="itemTags">Tags</label>
+              <input id="itemTags" type="text" />
+            </div>
+
+            <div class="field">
+              <label for="itemNotes">Notes</label>
+              <textarea id="itemNotes" rows="4"></textarea>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Save Changes</button>
+              <button class="btn btn-secondary" type="button" id="deleteBtn">Delete Item</button>
+            </div>
+
+            <p class="status" id="statusMsg" aria-live="polite"></p>
+          </form>
+        </section>
+      </section>
+    </div>
+  </main>
+
+  <script src="../Javascript/store.js"></script>
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/item-detail.js"></script>
+</body>
+</html>

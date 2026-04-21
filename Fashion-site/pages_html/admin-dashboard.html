@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - 489 Fashion</title>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="home.html">
+                <span class="brand-mark">489</span>
+                <span>Fashion</span>
+            </a>
+
+            <nav class="nav-center" id="topNav">
+                <a href="admin-dashboard.html" class="active">Dashboard</a>
+                <a href="admin-users.html">User Management</a>
+                <a href="admin-moderation.html">Moderation Queue</a>
+            </nav>
+
+            <div class="nav-right">
+<<<<<<< HEAD
+                <a class="signin-link" href="#">Logout</a>
+=======
+                <a class="signin-link" href="../index.html">Logout</a>
+>>>>>>> origin/main
+                <a class="avatar-btn" href="#" title="Admin Profile">
+                    <span class="avatar-fallback">A</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-container">
+
+        <header class="admin-welcome">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Platform overview and management tools.</p>
+            </div>
+            <span class="admin-badge">Admin</span>
+        </header>
+
+        <!-- Stats Row -->
+        <section class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number" id="statTotalUsers">248</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statActiveCreators">87</div>
+                <div class="stat-label">Active Creators</div>
+            </div>
+            <div class="stat-card warn">
+                <div class="stat-number" id="statPendingReports">14</div>
+                <div class="stat-label">Pending Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="statSuspended">3</div>
+                <div class="stat-label">Suspended Accounts</div>
+            </div>
+        </section>
+
+        <!-- Action Cards -->
+        <section class="action-grid">
+            <a href="admin-users.html" class="action-card">
+                <div class="card-icon">👥</div>
+                <h3>User Management</h3>
+                <p>Search, view, suspend, or reactivate user accounts.</p>
+                <span class="btn secondary">Manage Users</span>
+            </a>
+
+            <a href="admin-moderation.html" class="action-card highlight">
+                <div class="card-icon">🚩</div>
+                <h3>Moderation Queue</h3>
+                <p>Review reported posts and boards, and take action.</p>
+                <span class="btn primary">Open Queue <span class="badge" id="queueBadge">14</span></span>
+            </a>
+        </section>
+
+        <!-- Audit Log -->
+        <section class="audit-section">
+            <div class="section-header">
+                <h2>Recent Audit Log</h2>
+                <span class="section-note">Last 5 actions</span>
+            </div>
+
+            <table class="audit-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Admin ID</th>
+                        <th>Action</th>
+                        <th>Target</th>
+                    </tr>
+                </thead>
+                <tbody id="auditLogBody">
+                    <tr>
+                        <td>2026-03-04 10:42</td>
+                        <td>admin_01</td>
+                        <td><span class="tag tag-remove">Content Removed</span></td>
+                        <td>Post #1082</td>
+                    </tr>
+                    <tr>
+                        <td>2026-03-04 09:15</td>
+                        <td>admin_01</td>
+                        <td><span class="tag tag-suspend">User Suspended</span></td>
+                        <td>@user_trendy</td>
+                    </tr>
+                    <tr>
+                        <td>2026-03-03 17:30</td>
+                        <td>admin_01</td>
+                        <td><span class="tag tag-warn">User Warned</span></td>
+                        <td>@styleking99</td>
+                    </tr>
+                    <tr>
+                        <td>2026-03-03 14:05</td>
+                        <td>admin_01</td>
+                        <td><span class="tag tag-restore">User Reactivated</span></td>
+                        <td>@jess_fits</td>
+                    </tr>
+                    <tr>
+                        <td>2026-03-03 11:20</td>
+                        <td>admin_01</td>
+                        <td><span class="tag tag-remove">Content Hidden</span></td>
+                        <td>Board #304</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+<<<<<<< HEAD
+    <script src="../Javascript/store.js"></script>
+  <script src="../Javascript/app.js"></script>
+=======
+    <script src="../Javascript/app.js"></script>
+>>>>>>> origin/main
+    <script src="../Javascript/admin-dashboard.js"></script>
+</body>
+</html>

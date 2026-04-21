@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feed - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/feed.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="header">
+        <h1>Public Feed</h1>
+        <p>Browse creator posts. Guests can view only—login to follow, post, or comment.</p>
+      </div>
+
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Search posts (tags, creator, caption)..." />
+      </div>
+
+      <section class="grid" id="feedGrid"></section>
+    </div>
+  </main>
+
+  <script src="../Javascript/store.js"></script>
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/feed.js"></script>
+</body>
+</html>

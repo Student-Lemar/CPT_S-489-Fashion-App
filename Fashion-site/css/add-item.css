@@ -1,0 +1,180 @@
+.page{
+  min-height: calc(100vh - 56px);
+  background: #f7f8fb;
+  color: #222;
+  padding: 32px 16px 56px;
+}
+
+.container{
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.page-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.page-header h1{
+  margin: 0;
+  font-size: 30px;
+}
+
+.page-header p{
+  margin: 6px 0 0;
+  color: #666;
+}
+
+.back-link{
+  color: #444;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.back-link:hover{
+  text-decoration: underline;
+}
+
+.layout{
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 22px;
+}
+
+.card{
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+.preview-card{
+  padding: 18px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.upload-preview{
+  min-height: 360px;
+  border-radius: 16px;
+  border: 1px dashed #d8dce3;
+  background: linear-gradient(135deg, rgba(255,77,141,0.10), rgba(124,92,255,0.10));
+  display: grid;
+  place-items: center;
+  font-size: 88px;
+  color: #444;
+  overflow: hidden;
+}
+
+.upload-preview img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.preview-note{
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+}
+
+.form-card{
+  padding: 18px;
+}
+
+#addItemForm{
+  display: grid;
+  gap: 16px;
+}
+
+.field{
+  display: grid;
+  gap: 8px;
+}
+
+.field label{
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+}
+
+.field input,
+.field select,
+.field textarea{
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color: #ff4d8d;
+}
+
+.actions{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.btn{
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-primary{
+  background: #ff4d8d;
+  color: #fff;
+}
+
+.btn-primary:hover{
+  background: #e63e7b;
+}
+
+.btn-secondary{
+  background: #edf1f5;
+  color: #222;
+}
+
+.btn-secondary:hover{
+  background: #e4e9ef;
+}
+
+.status{
+  min-height: 18px;
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.status.success{
+  color: #1d7f45;
+}
+
+.status.error{
+  color: #b42318;
+}
+
+@media (max-width: 860px){
+  .layout{
+    grid-template-columns: 1fr;
+  }
+
+  .upload-preview{
+    min-height: 260px;
+  }
+}

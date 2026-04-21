@@ -1,72 +1,28 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.getElementById('posts-grid');
 
-    const posts = [
-        {
-            id: 1,
-            title: "Beach Vibes",
-            caption: "Thinking about this for the trip to Miami.",
-            items: ["👕", "🩳", "🕶️"], 
-            likes: 24,
-            date: "2h ago"
-        },
-        {
-            id: 2,
-            title: "Coffee Run",
-            caption: "Simple and comfortable for Sunday morning.",
-            items: ["🧥", "👖", "👟"],
-            likes: 12,
-            date: "1d ago"
-        },
-        {
-            id: 3,
-            title: "Office Casual",
-            caption: "Trying to mix up the usual rotation.",
-            // Only 2 items = will trigger the "Large" layout
-            items: ["👔", "👖"], 
-            likes: 8,
-            date: "3d ago"
-        }
-    ];
-
-    function renderPosts(data) {
-        grid.innerHTML = '';
-        
-        data.forEach(post => {
-            const card = document.createElement('div');
-            card.classList.add('post-card');
-            
-            // GENERATE COLLAGE HTML
-            const itemsHtml = post.items.map((icon, index) => {
-                let extraClass = '';
-                // Logic: If exactly 2 items, make them both tall
-                if (post.items.length === 2) {
-                    extraClass = 'large'; 
-                } 
-                // Logic: If 3 items, make the first one tall
-                else if (post.items.length === 3 && index === 0) {
-                    extraClass = 'large';
-                }
-                return `<div class="preview-item ${extraClass}">${icon}</div>`;
-            }).join('');
-            
-            card.innerHTML = `
-                <div class="card-preview">
-                    ${itemsHtml}
-                </div>
-                <div class="post-content">
-                    <div class="post-title">${post.title}</div>
-                    <div class="post-caption">${post.caption}</div>
-                    <div class="post-footer">
-                        <span>❤️ ${post.likes}</span>
-                        <span>${post.date}</span>
-                    </div>
-                </div>
-            `;
-            
-            grid.appendChild(card);
-        });
-    }
-
-    renderPosts(posts);
-});
+(function () {
+  const App = window.FashionApp;
+  const user = App?.getSession();
+  const grid = document.getElementById('posts-grid');
+  if (!App || !grid) return;
+  const id = new URLSearchParams(window.location.search).get('id') || (user ? App.getUserBoards(user.username)[0]?.id : null) || App.getPublicBoards()[0]?.id;
+  const board = App.getBoard(id);
+  if (!board) { grid.innerHTML = '<p>Board not found.</p>'; return; }
+  document.querySelector('.board-meta .visibility-badge').textContent = board.visibility === 'public' ? '🌍 Public Board' : '🔒 Private Board';
+  document.querySelector('.board-meta .visibility-badge').className = `visibility-badge ${board.visibility}`;
+  document.querySelector('.date-badge').textContent = `Created ${App.formatDate(board.createdAt)}`;
+  document.querySelector('.board-header h1').textContent = board.name;
+  document.querySelector('.description').textContent = board.description || 'No description yet.';
+  const profile = App.getProfile(board.owner);
+  const creatorNode = document.querySelector('.creator-info div:last-child strong');
+  if (creatorNode) creatorNode.textContent = profile.displayName || board.owner;
+  const creatorSmall = document.querySelector('.creator-info .avatar-small');
+  if (creatorSmall) creatorSmall.textContent = (profile.displayName || board.owner).slice(0,1).toUpperCase();
+  const posts = App.boardOutfits(board);
+  grid.innerHTML = posts.length ? posts.map(post => {
+    const icons = App.getOutfitIcons(post);
+    const itemsHtml = icons.map((icon, index) => `<div class="preview-item ${(icons.length===2 || (icons.length===3 && index===0)) ? 'large' : ''}">${icon}</div>`).join('');
+    return `<div class="post-card"><div class="card-preview">${itemsHtml}</div><div class="post-content"><div class="post-title">${post.name}</div><div class="post-caption">${post.caption || ''}</div><div class="post-footer"><span>❤️ ${post.likes || 0}</span><span>${App.formatDate(post.createdAt)}</span></div></div></div>`;
+  }).join('') : '<p>No outfits on this board yet.</p>';
+  document.querySelector('.header-actions .btn.secondary')?.addEventListener('click', () => window.location.href = `create-board.html?edit=${encodeURIComponent(board.id)}`);
+  document.querySelector('.header-actions .btn.primary-btn')?.addEventListener('click', () => window.location.href = 'saved-outfits.html');
+})();

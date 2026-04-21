@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Settings - 489 Fashion</title>
+
+  <link rel="stylesheet" href="../css/main.css" />
+  <link rel="stylesheet" href="../css/profile.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="home.html">
+        <span class="brand-mark">489</span>
+        <span>Fashion</span>
+      </a>
+
+      <nav class="nav-center" id="topNav"></nav>
+
+      <div class="nav-right">
+        <a class="signin-link" href="login.html" data-page="login.html">Sign In</a>
+
+        <a class="avatar-btn" href="profile.html" title="Account Settings">
+          <span class="avatar-fallback">👤</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <div class="page-header">
+        <h1>Account Settings</h1>
+        <p>Update your account details and profile picture.</p>
+      </div>
+
+      <section class="card profile-card">
+        <div class="avatar-section">
+          <div class="avatar-preview">
+            <img
+              id="profileImg"
+              src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="100%" height="100%" fill="%23e9edf2"/><text x="50%" y="54%" font-size="72" text-anchor="middle" fill="%23666" dominant-baseline="middle">👤</text></svg>'
+              alt="Profile picture"
+            />
+          </div>
+
+          <div class="avatar-actions">
+            <h2 class="section-title">Profile Picture</h2>
+            <p class="muted">Upload a square image for best results (JPG/PNG).</p>
+
+            <input id="avatarInput" type="file" accept="image/*" hidden />
+            <div class="btn-row">
+              <button class="btn" id="changePhotoBtn" type="button">Change photo</button>
+              <button class="btn btn-ghost" id="removePhotoBtn" type="button">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <form id="profileForm" class="form" novalidate>
+          <div class="grid">
+            <div class="field">
+              <label for="displayName">Display name</label>
+              <input id="displayName" type="text" placeholder="Choose a display name" />
+            </div>
+
+            <div class="field">
+              <label for="username">Username</label>
+              <input id="username" type="text" placeholder="e.g. username" />
+            </div>
+
+            <div class="field">
+              <label for="email">Email (read-only for now)</label>
+              <input id="email" type="email" placeholder="you@example.com" disabled />
+            </div>
+
+            <div class="field field-span">
+              <label for="bio">Bio</label>
+              <textarea id="bio" rows="4" placeholder="Tell people about your style..."></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Save changes</button>
+            <button class="btn btn-ghost" id="resetBtn" type="button">Reset</button>
+            <span id="statusMsg" class="status" aria-live="polite"></span>
+          </div>
+        </form>
+      </section>
+
+      <section class="stats">
+        <div class="stat-card">
+          <div class="stat-num" id="statItems">0</div>
+          <div class="stat-label">Clothing Items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statOutfits">0</div>
+          <div class="stat-label">Outfits Saved</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="statFollowers">0</div>
+          <div class="stat-label">Followers</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="../Javascript/store.js"></script>
+  <script src="../Javascript/app.js"></script>
+  <script src="../Javascript/profile.js"></script>
+</body>
+</html>
