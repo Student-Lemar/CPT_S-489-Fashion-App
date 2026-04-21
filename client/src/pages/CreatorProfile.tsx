@@ -12,7 +12,8 @@ export default function CreatorProfile() {
   const navigate = useNavigate();
   const { session } = useAuth();
 
-  const handle = (username ?? "creator").replace(/^@/, "").toLowerCase();
+  // Keep usernames case-sensitive to match server storage/lookup.
+  const handle = (username ?? "creator").replace(/^@/, "");
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [posts, setPosts] = useState<FeedPost[]>([]);
@@ -30,7 +31,11 @@ export default function CreatorProfile() {
     ])
       .then(([prof, allPosts, fs]) => {
         setProfile(prof);
-        setPosts(allPosts.filter((p) => p.creator === handle));
+        setPosts(
+          allPosts.filter(
+            (p) => String(p.creator).toLowerCase() === handle.toLowerCase(),
+          ),
+        );
         if (fs) setFollowStatus(fs);
       })
       .catch(console.error)

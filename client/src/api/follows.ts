@@ -3,7 +3,7 @@ import type { FollowStatus } from "../types";
 
 export const followsApi = {
   status: (username: string) =>
-    api.get<FollowStatus>(`/follows/${encodeURIComponent(username)}`),
+    api.get<FollowStatus>(`/follows/${encodeURIComponent(username)}/status`),
 
   follow: (username: string) =>
     api.post<FollowStatus>(`/follows/${encodeURIComponent(username)}`, {}),

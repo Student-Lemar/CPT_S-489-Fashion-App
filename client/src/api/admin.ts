@@ -12,7 +12,7 @@ export const adminApi = {
   },
 
   toggleUserStatus: (username: string) =>
-    api.patch<User>(
+    api.post<User>(
       `/admin/users/${encodeURIComponent(username)}/toggle-status`,
       {},
     ),
@@ -26,10 +26,10 @@ export const adminApi = {
   },
 
   updateReport: (id: string, status: ReportStatus) =>
-    api.patch<Report>(`/admin/reports/${encodeURIComponent(id)}`, { status }),
+    api.put<Report>(`/admin/reports/${encodeURIComponent(id)}`, { status }),
 
   warnUser: (username: string) =>
-    api.patch<User>(`/admin/users/${encodeURIComponent(username)}/warn`, {}),
+    api.post<User>(`/admin/users/${encodeURIComponent(username)}/warn`, {}),
 
-  auditLog: () => api.get<AuditLogEntry[]>("/admin/audit"),
+  auditLog: () => api.get<AuditLogEntry[]>("/admin/audit-log"),
 };

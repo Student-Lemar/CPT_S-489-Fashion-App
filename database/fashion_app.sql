@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `name` VARCHAR(160) NOT NULL,
   `category` ENUM('tops','bottoms','shoes','outerwear','accessories') NOT NULL,
   `color` VARCHAR(64) NOT NULL,
+  `color_extracted` VARCHAR(64) NULL,
   `icon` VARCHAR(8) NULL,
   `tags` JSON NOT NULL,
   `notes` TEXT NULL,
