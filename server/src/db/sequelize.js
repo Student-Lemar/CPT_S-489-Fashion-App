@@ -2,6 +2,10 @@ const { Sequelize } = require('sequelize');
 const sequelizeConfig = require('./sequelize.config');
 
 const env = process.env.NODE_ENV || 'development';
+if (env === 'production') {
+  sequelizeConfig.assertProductionDatabaseEnvOrThrow();
+}
+
 const dbConfig = sequelizeConfig[env];
 
 if (!dbConfig) {

@@ -17,6 +17,12 @@ From the repo root:
 docker compose up -d
 ```
 
+If you are currently in `server/`, either `cd ..` first or run:
+
+```bash
+docker compose -f ../docker-compose.yml up -d
+```
+
 This starts MySQL on `localhost:3307` with:
 
 - database: `fashion_app`
@@ -43,3 +49,5 @@ Then open `http://localhost:3000/` (it serves `Fashion-site/pages_html/home.html
 - The UI still uses browser `localStorage` today; the server is the foundation for moving data/auth to MySQL next.
 - **CORS**: in `NODE_ENV=production`, set `CORS_ORIGINS` to your deployed site origin(s) (comma-separated). Development defaults to `http://localhost:$PORT` and `http://127.0.0.1:$PORT` if unset.
 - **DB passwords in production**: blank `DB_PASSWORD` is rejected unless you explicitly set `DB_ALLOW_EMPTY_PASSWORD=true` (discouraged).
+- **MySQL port**: the bundled `docker-compose.yml` maps MySQL to host port **3307**. If you don’t create `server/.env`, the server defaults match that compose file; if you use a local MySQL on **3306**, set `DB_PORT=3306` in `server/.env`.
+- **No DB handy?** you can still run the static UI with `SKIP_DB=true` (skips Sequelize connect/sync).

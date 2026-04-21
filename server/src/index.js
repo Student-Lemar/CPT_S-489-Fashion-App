@@ -5,9 +5,41 @@ const helmet = require('helmet');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
-const { PORT, NODE_ENV, STATIC_DIR, DB_SYNC } = require('./config');
+const { PORT, NODE_ENV, STATIC_DIR, DB_SYNC, SKIP_DB } = require('./config');
 const { sequelize } = require('./models');
 const apiRouter = require('./routes/api');
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function authenticateWithRetry() {
+  const attempts = Number(process.env.DB_CONNECT_RETRIES || 30);
+  const delayMs = Number(process.env.DB_CONNECT_RETRY_DELAY_MS || 1000);
+
+  let lastErr = null;
+  for (let i = 1; i <= attempts; i += 1) {
+    try {
+      await sequelize.authenticate();
+      return;
+    } catch (err) {
+      lastErr = err;
+      const code = err?.parent?.code || err?.original?.code || err?.code;
+      const retryable =
+        code === 'ECONNREFUSED' ||
+        code === 'ETIMEDOUT' ||
+        code === 'PROTOCOL_CONNECTION_LOST';
+
+      if (!retryable || i === attempts) break;
+
+      // eslint-disable-next-line no-console
+      console.warn(`[db] connect attempt ${i}/${attempts} failed (${code || 'unknown'}), retrying in ${delayMs}ms...`);
+      await sleep(delayMs);
+    }
+  }
+
+  throw lastErr;
+}
 
 function parseCorsAllowlist() {
   const raw = process.env.CORS_ORIGINS;
@@ -78,12 +110,31 @@ async function main() {
     res.sendFile(path.join(STATIC_DIR, 'pages_html', 'home.html'));
   });
 
-  await sequelize.authenticate();
+  if (SKIP_DB) {
+    // eslint-disable-next-line no-console
+    console.warn('[db] SKIP_DB=true — skipping Sequelize authenticate/sync (static site will still run).');
+  } else {
+    try {
+      await authenticateWithRetry();
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('[db] Failed to connect to MySQL. Common fixes:');
+      // eslint-disable-next-line no-console
+      console.error('- Start MySQL (repo includes Docker: `docker compose up -d` from repo root)');
+      // eslint-disable-next-line no-console
+      console.error('- If you ran compose from `server/`, use repo root OR: `docker compose -f ..\\docker-compose.yml up -d`');
+      // eslint-disable-next-line no-console
+      console.error('- Create `server/.env` from `server/env.example` (note DB_PORT=3307 for the bundled compose file)');
+      // eslint-disable-next-line no-console
+      console.error('- Or temporarily run without DB: `SKIP_DB=true`');
+      throw err;
+    }
 
-  if (DB_SYNC) {
-    // Dev convenience: creates tables from models.
-    // Turn off in production; prefer migrations.
-    await sequelize.sync();
+    if (DB_SYNC) {
+      // Dev convenience: creates tables from models.
+      // Turn off in production; prefer migrations.
+      await sequelize.sync();
+    }
   }
 
   app.listen(PORT, () => {
