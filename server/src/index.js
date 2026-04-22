@@ -100,6 +100,7 @@ async function main() {
 
   // Static site (existing prototype UI)
   app.use(express.static(STATIC_DIR));
+  app.use(express.static(path.join(STATIC_DIR, "pages_html")));
 
   // Friendly entry route
   app.get("/", (req, res) => {
@@ -115,7 +116,7 @@ async function main() {
     res.sendFile(path.join(STATIC_DIR, "pages_html", "home.html"));
   });
 
-  if (SKIP_DB) {
+  if (process.env.SKIP_DB === 'true') {
     // eslint-disable-next-line no-console
     console.warn('[db] SKIP_DB=true — skipping Sequelize authenticate/sync (static site will still run).');
   } else {
