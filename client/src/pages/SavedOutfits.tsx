@@ -130,14 +130,29 @@ export default function SavedOutfits() {
                       gap: "6px",
                     }}
                   >
-                    {icons.slice(0, 3).map((icon, i) => (
-                      <span
-                        key={i}
-                        style={{ textAlign: "center", fontSize: "1.8rem" }}
-                      >
-                        {icon}
-                      </span>
-                    ))}
+                    {icons.slice(0, 3).map((icon, i) => {
+                      const img = outfit.itemImages?.[i];
+                      return img ? (
+                        <img
+                          key={i}
+                          src={img}
+                          alt={icon}
+                          style={{
+                            width: "100%",
+                            aspectRatio: "1",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                        />
+                      ) : (
+                        <span
+                          key={i}
+                          style={{ textAlign: "center", fontSize: "1.8rem" }}
+                        >
+                          {icon}
+                        </span>
+                      );
+                    })}
                   </div>
                   <div style={{ padding: "12px 16px" }}>
                     <div

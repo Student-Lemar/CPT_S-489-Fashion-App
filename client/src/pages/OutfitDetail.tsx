@@ -144,20 +144,35 @@ export default function OutfitDetail() {
                 marginBottom: "12px",
               }}
             >
-              {icons.slice(0, 3).map((icon, i) => (
-                <div
-                  key={i}
-                  style={{
-                    background: "#f8f9fa",
-                    borderRadius: "12px",
-                    padding: "16px",
-                    textAlign: "center",
-                    fontSize: "2rem",
-                  }}
-                >
-                  {icon}
-                </div>
-              ))}
+              {icons.slice(0, 3).map((icon, i) => {
+                const img = outfit?.itemImages?.[i];
+                return img ? (
+                  <img
+                    key={i}
+                    src={img}
+                    alt={icon}
+                    style={{
+                      width: "100%",
+                      aspectRatio: "1",
+                      objectFit: "cover",
+                      borderRadius: "12px",
+                    }}
+                  />
+                ) : (
+                  <div
+                    key={i}
+                    style={{
+                      background: "#f8f9fa",
+                      borderRadius: "12px",
+                      padding: "16px",
+                      textAlign: "center",
+                      fontSize: "2rem",
+                    }}
+                  >
+                    {icon}
+                  </div>
+                );
+              })}
             </div>
             {outfit?.aiMeta && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>

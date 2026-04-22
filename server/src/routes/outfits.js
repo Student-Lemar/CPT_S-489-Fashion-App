@@ -1,6 +1,6 @@
 const express = require("express");
 const crypto = require("crypto");
-const { Outfit } = require("../models");
+const { Outfit, Item } = require("../models");
 const { authenticate } = require("../middleware/auth");
 
 const router = express.Router();
@@ -11,7 +11,23 @@ router.get("/", async (req, res) => {
     const outfits = await Outfit.findAll({
       where: { ownerUsername: req.user.username },
     });
-    res.json(outfits);
+    // Attach item images for each outfit
+    const result = await Promise.all(
+      outfits.map(async (o) => {
+        const plain = o.toJSON();
+        const itemIds = Array.isArray(plain.items) ? plain.items : [];
+        const itemImages = await Promise.all(
+          itemIds.map(async (id) => {
+            const item = await Item.findByPk(id, {
+              attributes: ["imageDataUrl"],
+            });
+            return item ? item.imageDataUrl || null : null;
+          })
+        );
+        return { ...plain, itemImages };
+      })
+    );
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: "Failed to list outfits" });
   }
@@ -23,7 +39,15 @@ router.get("/:id", async (req, res) => {
       where: { id: req.params.id, ownerUsername: req.user.username },
     });
     if (!outfit) return res.status(404).json({ error: "Outfit not found" });
-    res.json(outfit);
+    const plain = outfit.toJSON();
+    const itemIds = Array.isArray(plain.items) ? plain.items : [];
+    const itemImages = await Promise.all(
+      itemIds.map(async (id) => {
+        const item = await Item.findByPk(id, { attributes: ["imageDataUrl"] });
+        return item ? item.imageDataUrl || null : null;
+      })
+    );
+    res.json({ ...plain, itemImages });
   } catch (err) {
     res.status(500).json({ error: "Failed to get outfit" });
   }

@@ -72,7 +72,14 @@ router.post("/register", async (req, res) => {
       avatarDataUrl: null,
     });
 
-    res.status(201).json({ ok: true });
+    const token = makeToken(user);
+    res.cookie(COOKIE, token, cookieOpts(7 * 24 * 60 * 60 * 1000));
+    res.status(201).json({
+      username: user.username,
+      role: user.role,
+      displayName: user.displayName,
+      status: user.status,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Registration failed" });

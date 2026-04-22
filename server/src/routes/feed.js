@@ -1,6 +1,6 @@
 const express = require("express");
 const { Op } = require("sequelize");
-const { Outfit, Profile } = require("../models");
+const { Outfit, Profile, Item } = require("../models");
 
 const router = express.Router();
 
@@ -38,6 +38,15 @@ router.get("/", async (req, res) => {
           caption: o.caption || "",
           tags: o.tags || [],
           items: o.itemIcons || [],
+          itemImages: await (async () => {
+            const ids = o.items || [];
+            if (!ids.length) return [];
+            try {
+              const rows = await Item.findAll({ where: { id: ids }, attributes: ["id", "imageDataUrl"] });
+              const map = Object.fromEntries(rows.map(r => [r.id, r.imageDataUrl]));
+              return ids.map(id => map[id] || null);
+            } catch { return ids.map(() => null); }
+          })(),
           createdAt: o.createdAt,
         };
       }),

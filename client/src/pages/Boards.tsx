@@ -129,11 +129,39 @@ export default function Boards() {
                   >
                     {board.description || "No description yet."}
                   </p>
-                  <div style={{ fontSize: "1.8rem", marginBottom: "10px" }}>
-                    {icons.length ? (
-                      icons.map((ic, i) => <span key={i}>{ic}</span>)
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "6px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {boardOutfits.length > 0 ? (
+                      boardOutfits
+                        .slice(0, 1)
+                        .flatMap((o) =>
+                          (o.itemImages ?? []).slice(0, 3).map((img, i) =>
+                            img ? (
+                              <img
+                                key={i}
+                                src={img}
+                                alt=""
+                                style={{
+                                  width: "52px",
+                                  height: "52px",
+                                  objectFit: "cover",
+                                  borderRadius: "8px",
+                                }}
+                              />
+                            ) : (
+                              <span key={i} style={{ fontSize: "1.8rem" }}>
+                                {o.itemIcons[i] ?? "👕"}
+                              </span>
+                            )
+                          )
+                        )
                     ) : (
-                      <>🧥 👖 👟</>
+                      <span style={{ fontSize: "1.8rem" }}>🧥 👖 👟</span>
                     )}
                   </div>
                   <p style={{ fontSize: "12px", color: "#888" }}>

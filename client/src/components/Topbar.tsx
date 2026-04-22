@@ -10,9 +10,8 @@ export default function Topbar() {
     navigate("/");
   }
 
-  const initials = session
-    ? (session.displayName || session.username).slice(0, 1).toUpperCase()
-    : "";
+  const name = session?.displayName || session?.username || "";
+  const initials = name ? name.slice(0, 1).toUpperCase() : "";
 
   return (
     <header className="topbar">

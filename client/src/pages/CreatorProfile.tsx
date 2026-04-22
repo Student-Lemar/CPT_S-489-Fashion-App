@@ -3,9 +3,18 @@ import { useParams, useNavigate } from "react-router-dom";
 import { profilesApi } from "../api/profiles";
 import { feedApi } from "../api/feed";
 import { followsApi } from "../api/follows";
+import { reportsApi } from "../api/reports";
 import { ApiError } from "../api/client";
 import { useAuth } from "../context/AuthContext";
 import type { Profile, FeedPost, FollowStatus } from "../types";
+
+const REASONS = [
+  "Inappropriate content",
+  "Spam or misleading",
+  "Harassment or bullying",
+  "Copyright infringement",
+  "Other",
+];
 
 export default function CreatorProfile() {
   const { username } = useParams<{ username: string }>();
@@ -22,6 +31,12 @@ export default function CreatorProfile() {
     followerCount: 0,
   });
   const [loading, setLoading] = useState(true);
+
+  // Report modal state
+  const [reportTarget, setReportTarget] = useState<FeedPost | null>(null);
+  const [reportReason, setReportReason] = useState(REASONS[0]);
+  const [reportStatus, setReportStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [reportMsg, setReportMsg] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -61,6 +76,56 @@ export default function CreatorProfile() {
       cancelled = true;
     };
   }, [handle, session]);
+
+  async function submitReport() {
+    if (!reportTarget) return;
+    setReportStatus("sending");
+    try {
+      await reportsApi.submit({
+        type: "post",
+        contentId: reportTarget.id,
+        contentLabel: reportTarget.title,
+        reason: reportReason,
+      });
+      setReportStatus("done");
+      setReportMsg("Report submitted. Our moderation team will review it.");
+    } catch (err) {
+      setReportStatus("error");
+      setReportMsg(err instanceof ApiError ? err.message : "Failed to submit report.");
+    }
+  }
+
+  function closeModal() {
+    setReportTarget(null);
+    setReportReason(REASONS[0]);
+    setReportStatus("idle");
+    setReportMsg("");
+  }
+
+  async function submitReport() {
+    if (!reportTarget) return;
+    setReportStatus("sending");
+    try {
+      await reportsApi.submit({
+        type: "post",
+        contentId: reportTarget.id,
+        contentLabel: reportTarget.title,
+        reason: reportReason,
+      });
+      setReportStatus("done");
+      setReportMsg("Report submitted. Our moderation team will review it.");
+    } catch (err) {
+      setReportStatus("error");
+      setReportMsg(err instanceof ApiError ? err.message : "Failed to submit report.");
+    }
+  }
+
+  function closeModal() {
+    setReportTarget(null);
+    setReportReason(REASONS[0]);
+    setReportStatus("idle");
+    setReportMsg("");
+  }
 
   async function handleFollow() {
     if (!session) {
@@ -210,25 +275,113 @@ export default function CreatorProfile() {
                     padding: "16px",
                     textAlign: "center",
                     fontSize: "2rem",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "4px",
+                    justifyContent: "center",
                   }}
                 >
-                  {post.items.map((ic, i) => (
-                    <span key={i}>{ic}</span>
-                  ))}
+                  {post.items.map((ic, i) => {
+                    const img = post.itemImages?.[i];
+                    return img ? (
+                      <img
+                        key={i}
+                        src={img}
+                        alt={ic}
+                        style={{
+                          width: "68px",
+                          height: "68px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    ) : (
+                      <span key={i}>{ic}</span>
+                    );
+                  })}
                 </div>
                 <div style={{ padding: "12px" }}>
                   <div style={{ fontWeight: 700, marginBottom: "4px" }}>
                     {post.title}
                   </div>
-                  <p style={{ fontSize: "13px", color: "#666", margin: 0 }}>
+                  <p style={{ fontSize: "13px", color: "#666", margin: "0 0 10px" }}>
                     {post.caption}
                   </p>
+                  {session && session.username.toLowerCase() !== handle.toLowerCase() && (
+                    <button
+                      onClick={() => setReportTarget(post)}
+                      style={{
+                        background: "none",
+                        border: "1px solid #ddd",
+                        borderRadius: "8px",
+                        padding: "5px 10px",
+                        fontSize: "12px",
+                        color: "#888",
+                        cursor: "pointer",
+                      }}
+                    >
+                      🚩 Report
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Report modal */}
+      {reportTarget && (
+        <div
+          onClick={closeModal}
+          style={{
+            position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)",
+            display: "flex", alignItems: "center", justifyContent: "center", zIndex: 999,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="card"
+            style={{ width: "100%", maxWidth: "420px", padding: "28px", margin: "16px" }}
+          >
+            <h2 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "4px" }}>Report Post</h2>
+            <p style={{ color: "#888", fontSize: "13px", marginBottom: "16px" }}>
+              "{reportTarget.title}" by @{reportTarget.creator}
+            </p>
+            {reportStatus === "done" || reportStatus === "error" ? (
+              <>
+                <p style={{ color: reportStatus === "done" ? "#1d7f45" : "#b42318", marginBottom: "16px" }}>
+                  {reportMsg}
+                </p>
+                <button className="btn btn-secondary" onClick={closeModal}>Close</button>
+              </>
+            ) : (
+              <>
+                <div className="field" style={{ marginBottom: "16px" }}>
+                  <label htmlFor="reportReason">Reason</label>
+                  <select
+                    id="reportReason"
+                    value={reportReason}
+                    onChange={(e) => setReportReason(e.target.value)}
+                  >
+                    {REASONS.map((r) => <option key={r} value={r}>{r}</option>)}
+                  </select>
+                </div>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button
+                    className="btn btn-primary"
+                    onClick={submitReport}
+                    disabled={reportStatus === "sending"}
+                  >
+                    {reportStatus === "sending" ? "Submitting…" : "Submit Report"}
+                  </button>
+                  <button className="btn btn-secondary" onClick={closeModal}>Cancel</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

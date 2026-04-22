@@ -174,14 +174,29 @@ export default function BoardDetail() {
                       gap: "6px",
                     }}
                   >
-                    {icons.slice(0, 3).map((ic, i) => (
-                      <span
-                        key={i}
-                        style={{ textAlign: "center", fontSize: "1.8rem" }}
-                      >
-                        {ic}
-                      </span>
-                    ))}
+                    {icons.slice(0, 3).map((ic, i) => {
+                      const img = post.itemImages?.[i];
+                      return img ? (
+                        <img
+                          key={i}
+                          src={img}
+                          alt={ic}
+                          style={{
+                            width: "100%",
+                            aspectRatio: "1",
+                            objectFit: "cover",
+                            borderRadius: "8px",
+                          }}
+                        />
+                      ) : (
+                        <span
+                          key={i}
+                          style={{ textAlign: "center", fontSize: "1.8rem" }}
+                        >
+                          {ic}
+                        </span>
+                      );
+                    })}
                   </div>
                   <div style={{ padding: "14px" }}>
                     <div style={{ fontWeight: 700, marginBottom: "4px" }}>

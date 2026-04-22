@@ -228,6 +228,7 @@ export default function OutfitGenerator() {
       caption: suggestion.reason,
       items: suggestion.items.map((i) => i.id),
       itemIcons: suggestion.items.map((i) => i.icon ?? "👕"),
+      itemImages: suggestion.items.map((i) => i.imageDataUrl ?? null),
       posted: false,
       boardIds: [],
       likes: 0,

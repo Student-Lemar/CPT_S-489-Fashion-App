@@ -61,6 +61,7 @@ export interface Outfit {
   caption?: string;
   items: string[]; // item IDs
   itemIcons: string[]; // emoji icons (resolved at save time)
+  itemImages?: (string | null)[]; // actual photos from DB
   posted: boolean;
   boardIds: string[];
   likes: number;
@@ -138,7 +139,8 @@ export interface FeedPost {
   tags: string[];
   likes: number;
   createdAt: string;
-  items: string[]; // emoji icons
+  items: string[]; // emoji icons (fallback)
+  itemImages?: (string | null)[]; // actual photos from DB
 }
 
 // ── API responses ─────────────────────────────────────────────────────────────
